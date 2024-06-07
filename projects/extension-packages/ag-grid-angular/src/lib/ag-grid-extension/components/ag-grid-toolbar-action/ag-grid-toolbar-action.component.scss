@@ -1,0 +1,26 @@
+:host {
+  // Prevent click event on "host" when .disabled
+  display: contents;
+}
+
+.toolbar-action {
+  color: var(--ag-secondary-foreground-color);
+  font-size: 24px;
+  padding: 8px;
+  user-select: none;
+  &.disabled {
+    pointer-events: none;
+    color: var(
+      --ag-disabled-foreground-color,
+      --ag-input-disabled-border-color
+    );
+  }
+  &:hover {
+    cursor: pointer;
+    border-radius: 3px;
+    background: var(--ag-input-disabled-border-color);
+  }
+  &:active {
+    background: var(--ag-border-color);
+  }
+}
