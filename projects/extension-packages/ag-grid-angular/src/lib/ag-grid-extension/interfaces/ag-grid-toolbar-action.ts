@@ -14,5 +14,12 @@ export interface AgGridToolbarAction<TData = any, TContext = any> {
   /** Tooltop text for disabled action */
   tooltipDisabled?: string;
   /** Arrow function to execute on click. */
-  clickFn?: (event: AgGridEvent<TData, TContext>) => void;
+  clickFn?: (event: AgGridToolbarActionClickParams<TData, TContext>) => void;
+}
+
+export interface AgGridToolbarActionClickParams<TData = any, TContext = any> {
+  /** AgGrid event */
+  event: AgGridEvent<TData, TContext>;
+  /** Reference to the clicked action */
+  action: AgGridToolbarAction<TData, TContext>;
 }

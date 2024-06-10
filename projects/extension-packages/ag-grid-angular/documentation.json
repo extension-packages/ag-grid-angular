@@ -36,12 +36,12 @@
         },
         {
             "name": "AgGridToolbarAction",
-            "id": "interface-AgGridToolbarAction-21d9871fd68696e8544be123025ec103054c76acc722a16400c831ba505b9c164bd3b8f7432d80901d33bc19d01a49e89aadea83cbe2ed1ce511039e16df6755",
+            "id": "interface-AgGridToolbarAction-9a07ed671ef2dbb2939a14f15a65e4005c17cb3fd6b065d65da1c97e10afba55ddcc34aca6bec761f74f58a90606b2cd328fc7124468763e163a8fe61804456a",
             "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/interfaces/ag-grid-toolbar-action.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { AgGridEvent } from 'ag-grid-community';\n\nexport interface AgGridToolbarAction<TData = any, TContext = any> {\n  /** Action color */\n  color?: string;\n  /** Default: `false`. */\n  disabled?: boolean;\n  /** If no icon is provided, the `ToolbarAction` will be treated as a separator. */\n  icon?: string;\n  /** ID for toolbar action, used to set html id. */\n  id?: string;\n  /** Tooltip text. */\n  tooltip?: string;\n  /** Tooltop text for disabled action */\n  tooltipDisabled?: string;\n  /** Arrow function to execute on click. */\n  clickFn?: (event: AgGridEvent<TData, TContext>) => void;\n}\n",
+            "sourceCode": "import { AgGridEvent } from 'ag-grid-community';\n\nexport interface AgGridToolbarAction<TData = any, TContext = any> {\n  /** Action color */\n  color?: string;\n  /** Default: `false`. */\n  disabled?: boolean;\n  /** If no icon is provided, the `ToolbarAction` will be treated as a separator. */\n  icon?: string;\n  /** ID for toolbar action, used to set html id. */\n  id?: string;\n  /** Tooltip text. */\n  tooltip?: string;\n  /** Tooltop text for disabled action */\n  tooltipDisabled?: string;\n  /** Arrow function to execute on click. */\n  clickFn?: (event: AgGridToolbarActionClickParams<TData, TContext>) => void;\n}\n\nexport interface AgGridToolbarActionClickParams<TData = any, TContext = any> {\n  /** AgGrid Event */\n  event: AgGridEvent<TData, TContext>;\n  /** Reference to the action */\n  action: AgGridToolbarAction<TData, TContext>;\n}\n",
             "properties": [
                 {
                     "name": "clickFn",
@@ -112,6 +112,41 @@
                     "description": "<p>Tooltop text for disabled action</p>\n",
                     "line": 15,
                     "rawdescription": "\nTooltop text for disabled action"
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 171,
+            "methods": [],
+            "extends": []
+        },
+        {
+            "name": "AgGridToolbarActionClickParams",
+            "id": "interface-AgGridToolbarActionClickParams-9a07ed671ef2dbb2939a14f15a65e4005c17cb3fd6b065d65da1c97e10afba55ddcc34aca6bec761f74f58a90606b2cd328fc7124468763e163a8fe61804456a",
+            "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/interfaces/ag-grid-toolbar-action.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { AgGridEvent } from 'ag-grid-community';\n\nexport interface AgGridToolbarAction<TData = any, TContext = any> {\n  /** Action color */\n  color?: string;\n  /** Default: `false`. */\n  disabled?: boolean;\n  /** If no icon is provided, the `ToolbarAction` will be treated as a separator. */\n  icon?: string;\n  /** ID for toolbar action, used to set html id. */\n  id?: string;\n  /** Tooltip text. */\n  tooltip?: string;\n  /** Tooltop text for disabled action */\n  tooltipDisabled?: string;\n  /** Arrow function to execute on click. */\n  clickFn?: (event: AgGridToolbarActionClickParams<TData, TContext>) => void;\n}\n\nexport interface AgGridToolbarActionClickParams<TData = any, TContext = any> {\n  /** AgGrid Event */\n  event: AgGridEvent<TData, TContext>;\n  /** Reference to the action */\n  action: AgGridToolbarAction<TData, TContext>;\n}\n",
+            "properties": [
+                {
+                    "name": "action",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "AgGridToolbarAction<TData | TContext>",
+                    "optional": false,
+                    "description": "<p>Reference to the action</p>\n",
+                    "line": 24,
+                    "rawdescription": "\nReference to the action"
+                },
+                {
+                    "name": "event",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "AgGridEvent<TData | TContext>",
+                    "optional": false,
+                    "description": "<p>AgGrid Event</p>\n",
+                    "line": 22,
+                    "rawdescription": "\nAgGrid Event"
                 }
             ],
             "indexSignatures": [],
@@ -482,7 +517,7 @@
                     }
                 }
             },
-            "templateData": "<ag-grid-toolbar\n  [agGrid]=\"agGrid\"\n  [debounceSearch]=\"debounceSearch\"\n  [disableSearch]=\"disableSearch\"\n  [enableSearch]=\"enableSearch\"\n  [placeholderSearch]=\"placeholderSearch\"\n>\n  <ng-content select=\"[toolbarLeft]\" toolbarLeft></ng-content>\n  <ng-content select=\"[toolbarCenter]\" toolbarCenter></ng-content>\n  <ng-content select=\"[toolbarRight]\" toolbarRight></ng-content>\n  <!-- Actions -->\n  <ng-content select=\"[actionsLeft]\" toolbarRight></ng-content>\n  <ng-container *ngFor=\"let action of actions\" toolbarRight>\n    <ng-container *ngIf=\"!action?.icon\">\n      <span class=\"toolbar-action-separator\"></span>\n    </ng-container>\n\n    <div [title]=\"action.disabled ? action.tooltipDisabled || '' : ''\">\n      <ag-grid-toolbar-action\n        *ngIf=\"action?.icon\"\n        [color]=\"action?.color\"\n        [disabled]=\"action?.disabled || false\"\n        [icon]=\"action.icon\"\n        [id]=\"action.id\"\n        [tooltip]=\"action.tooltip || ''\"\n        (click)=\"action?.clickFn?.(toolbarActionEvent)\"\n      ></ag-grid-toolbar-action>\n    </div>\n  </ng-container>\n  <ng-content select=\"[actionsRight]\" toolbarRight></ng-content>\n  <!-- Actions END -->\n</ag-grid-toolbar>\n<div class=\"ag-grid-content\">\n  <ng-content>\n    <!-- ag-grid-angular -->\n  </ng-content>\n</div>\n"
+            "templateData": "<ag-grid-toolbar\n  [agGrid]=\"agGrid\"\n  [debounceSearch]=\"debounceSearch\"\n  [disableSearch]=\"disableSearch\"\n  [enableSearch]=\"enableSearch\"\n  [placeholderSearch]=\"placeholderSearch\"\n>\n  <ng-content select=\"[toolbarLeft]\" toolbarLeft></ng-content>\n  <ng-content select=\"[toolbarCenter]\" toolbarCenter></ng-content>\n  <ng-content select=\"[toolbarRight]\" toolbarRight></ng-content>\n  <!-- Actions -->\n  <ng-content select=\"[actionsLeft]\" toolbarRight></ng-content>\n  <ng-container *ngFor=\"let action of actions\" toolbarRight>\n    <ng-container *ngIf=\"!action?.icon\">\n      <span class=\"toolbar-action-separator\"></span>\n    </ng-container>\n\n    <div [title]=\"action.disabled ? action.tooltipDisabled || '' : ''\">\n      <ag-grid-toolbar-action\n        *ngIf=\"action?.icon\"\n        [color]=\"action?.color\"\n        [disabled]=\"action?.disabled || false\"\n        [icon]=\"action.icon\"\n        [id]=\"action.id\"\n        [tooltip]=\"action.tooltip || ''\"\n        (click)=\"action?.clickFn?.({ event: toolbarActionEvent, action })\"\n      ></ag-grid-toolbar-action>\n    </div>\n  </ng-container>\n  <ng-content select=\"[actionsRight]\" toolbarRight></ng-content>\n  <!-- Actions END -->\n</ag-grid-toolbar>\n<div class=\"ag-grid-content\">\n  <ng-content>\n    <!-- ag-grid-angular -->\n  </ng-content>\n</div>\n"
         },
         {
             "name": "AgGridToolbarActionComponent",
@@ -877,7 +912,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "AgGridToolbarAction[]",
-                "defaultValue": "[\n  {\n    clickFn: ({ api }) => {\n      const data = { id: Number((Math.random() * 1000).toFixed(0)) };\n      const transaction = api.applyTransaction({ add: [data], addIndex: 0 });\n      api.flashCells({ rowNodes: transaction?.add });\n    },\n    color: 'seagreen',\n    icon: 'add_circle',\n    tooltip: 'Add new row',\n  },\n  {\n    clickFn: () => {\n      alert('Edit action clicked');\n    },\n    color: 'dodgerblue',\n    disabled: true,\n    icon: 'edit',\n    tooltip: 'Edit',\n    tooltipDisabled: 'Select a row to edit',\n  },\n  {\n    clickFn: ({ api }) => {\n      const rows = api.getSelectedRows();\n      api.applyTransaction({ remove: rows });\n    },\n    color: 'crimson',\n    disabled: true,\n    icon: 'delete',\n    tooltip: 'Delete selected row(s)',\n    tooltipDisabled: 'Select row(s) to delete',\n  },\n  {},\n  ...actionsSets.redoUndo,\n  {},\n  ...actionsSets.standard,\n]"
+                "defaultValue": "[\n  {\n    clickFn: (params) => {\n      const { api } = params.event;\n      const data = { id: Number((Math.random() * 1000).toFixed(0)) };\n      const transaction = api.applyTransaction({ add: [data], addIndex: 0 });\n      api.flashCells({ rowNodes: transaction?.add });\n    },\n    color: 'seagreen',\n    icon: 'add_circle',\n    tooltip: 'Add new row',\n  },\n  {\n    clickFn: () => {\n      alert('Edit action clicked');\n    },\n    color: 'dodgerblue',\n    disabled: true,\n    icon: 'edit',\n    tooltip: 'Edit',\n    tooltipDisabled: 'Select a row to edit',\n  },\n  {\n    clickFn: (params) => {\n      const { api } = params.event;\n      const rows = api.getSelectedRows();\n      api.applyTransaction({ remove: rows });\n    },\n    color: 'crimson',\n    disabled: true,\n    icon: 'delete',\n    tooltip: 'Delete selected row(s)',\n    tooltipDisabled: 'Select row(s) to delete',\n  },\n  {},\n  ...actionsSets.redoUndo,\n  {},\n  ...actionsSets.standard,\n]"
             },
             {
                 "name": "actionsSets",
@@ -987,7 +1022,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "AgGridToolbarAction",
-                "defaultValue": "{\n  export: {\n    icon: 'file_download',\n    tooltip: 'Export as csv',\n    clickFn: ({ api }) => {\n      api.exportDataAsCsv();\n    },\n  },\n  fit: {\n    icon: 'view_column',\n    tooltip: 'Fit columns',\n    clickFn: ({ api }) => {\n      api.sizeColumnsToFit();\n    },\n  },\n  redo: {\n    disabled: true,\n    icon: 'redo',\n    tooltip: 'Redo',\n    clickFn: ({ api }) => {\n      api.redoCellEditing();\n    },\n  },\n  reset: {\n    icon: 'restart_alt',\n    tooltip: 'Reset columns',\n    clickFn: ({ api }) => {\n      api.resetColumnState();\n    },\n  },\n  undo: {\n    disabled: true,\n    icon: 'undo',\n    tooltip: 'Undo',\n    clickFn: ({ api }) => {\n      api.undoCellEditing();\n    },\n  },\n}"
+                "defaultValue": "{\n  export: {\n    icon: 'file_download',\n    tooltip: 'Export as csv',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.exportDataAsCsv();\n    },\n  },\n  fit: {\n    icon: 'view_column',\n    tooltip: 'Fit columns',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.sizeColumnsToFit();\n    },\n  },\n  redo: {\n    disabled: true,\n    icon: 'redo',\n    tooltip: 'Redo',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.redoCellEditing();\n    },\n  },\n  reset: {\n    icon: 'restart_alt',\n    tooltip: 'Reset columns',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.resetColumnState();\n    },\n  },\n  undo: {\n    disabled: true,\n    icon: 'undo',\n    tooltip: 'Undo',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.undoCellEditing();\n    },\n  },\n}"
             },
             {
                 "name": "preview",
@@ -1093,7 +1128,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "AgGridToolbarAction[]",
-                    "defaultValue": "[\n  {\n    clickFn: ({ api }) => {\n      const data = { id: Number((Math.random() * 1000).toFixed(0)) };\n      const transaction = api.applyTransaction({ add: [data], addIndex: 0 });\n      api.flashCells({ rowNodes: transaction?.add });\n    },\n    color: 'seagreen',\n    icon: 'add_circle',\n    tooltip: 'Add new row',\n  },\n  {\n    clickFn: () => {\n      alert('Edit action clicked');\n    },\n    color: 'dodgerblue',\n    disabled: true,\n    icon: 'edit',\n    tooltip: 'Edit',\n    tooltipDisabled: 'Select a row to edit',\n  },\n  {\n    clickFn: ({ api }) => {\n      const rows = api.getSelectedRows();\n      api.applyTransaction({ remove: rows });\n    },\n    color: 'crimson',\n    disabled: true,\n    icon: 'delete',\n    tooltip: 'Delete selected row(s)',\n    tooltipDisabled: 'Select row(s) to delete',\n  },\n  {},\n  ...actionsSets.redoUndo,\n  {},\n  ...actionsSets.standard,\n]"
+                    "defaultValue": "[\n  {\n    clickFn: (params) => {\n      const { api } = params.event;\n      const data = { id: Number((Math.random() * 1000).toFixed(0)) };\n      const transaction = api.applyTransaction({ add: [data], addIndex: 0 });\n      api.flashCells({ rowNodes: transaction?.add });\n    },\n    color: 'seagreen',\n    icon: 'add_circle',\n    tooltip: 'Add new row',\n  },\n  {\n    clickFn: () => {\n      alert('Edit action clicked');\n    },\n    color: 'dodgerblue',\n    disabled: true,\n    icon: 'edit',\n    tooltip: 'Edit',\n    tooltipDisabled: 'Select a row to edit',\n  },\n  {\n    clickFn: (params) => {\n      const { api } = params.event;\n      const rows = api.getSelectedRows();\n      api.applyTransaction({ remove: rows });\n    },\n    color: 'crimson',\n    disabled: true,\n    icon: 'delete',\n    tooltip: 'Delete selected row(s)',\n    tooltipDisabled: 'Select row(s) to delete',\n  },\n  {},\n  ...actionsSets.redoUndo,\n  {},\n  ...actionsSets.standard,\n]"
                 },
                 {
                     "name": "ContentProjections",
@@ -1165,7 +1200,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "AgGridToolbarAction",
-                    "defaultValue": "{\n  export: {\n    icon: 'file_download',\n    tooltip: 'Export as csv',\n    clickFn: ({ api }) => {\n      api.exportDataAsCsv();\n    },\n  },\n  fit: {\n    icon: 'view_column',\n    tooltip: 'Fit columns',\n    clickFn: ({ api }) => {\n      api.sizeColumnsToFit();\n    },\n  },\n  redo: {\n    disabled: true,\n    icon: 'redo',\n    tooltip: 'Redo',\n    clickFn: ({ api }) => {\n      api.redoCellEditing();\n    },\n  },\n  reset: {\n    icon: 'restart_alt',\n    tooltip: 'Reset columns',\n    clickFn: ({ api }) => {\n      api.resetColumnState();\n    },\n  },\n  undo: {\n    disabled: true,\n    icon: 'undo',\n    tooltip: 'Undo',\n    clickFn: ({ api }) => {\n      api.undoCellEditing();\n    },\n  },\n}"
+                    "defaultValue": "{\n  export: {\n    icon: 'file_download',\n    tooltip: 'Export as csv',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.exportDataAsCsv();\n    },\n  },\n  fit: {\n    icon: 'view_column',\n    tooltip: 'Fit columns',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.sizeColumnsToFit();\n    },\n  },\n  redo: {\n    disabled: true,\n    icon: 'redo',\n    tooltip: 'Redo',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.redoCellEditing();\n    },\n  },\n  reset: {\n    icon: 'restart_alt',\n    tooltip: 'Reset columns',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.resetColumnState();\n    },\n  },\n  undo: {\n    disabled: true,\n    icon: 'undo',\n    tooltip: 'Undo',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.undoCellEditing();\n    },\n  },\n}"
                 }
             ],
             "projects/extension-packages/ag-grid-angular/src/stories/story-helpers/grid-options.ts": [
@@ -1319,7 +1354,7 @@
     },
     "routes": [],
     "coverage": {
-        "count": 7,
+        "count": 9,
         "status": "low",
         "files": [
             {
@@ -1475,6 +1510,15 @@
                 "coveragePercent": 87,
                 "coverageCount": "7/8",
                 "status": "very-good"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/interfaces/ag-grid-toolbar-action.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "AgGridToolbarActionClickParams",
+                "coveragePercent": 66,
+                "coverageCount": "2/3",
+                "status": "good"
             },
             {
                 "filePath": "projects/extension-packages/ag-grid-angular/src/lib/constants/index.ts",

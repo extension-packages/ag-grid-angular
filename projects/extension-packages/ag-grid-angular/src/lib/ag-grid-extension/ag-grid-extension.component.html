@@ -23,7 +23,7 @@
         [icon]="action.icon"
         [id]="action.id"
         [tooltip]="action.tooltip || ''"
-        (click)="action?.clickFn?.(toolbarActionEvent)"
+        (click)="action?.clickFn?.({ event: toolbarActionEvent, action })"
       ></ag-grid-toolbar-action>
     </div>
   </ng-container>

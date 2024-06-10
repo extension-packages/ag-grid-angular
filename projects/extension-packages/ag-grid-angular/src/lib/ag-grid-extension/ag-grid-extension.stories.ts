@@ -13,10 +13,12 @@ import {
   actionsSets,
 } from '../../public-api';
 import { gridOptions } from '../../stories/story-helpers/grid-options';
+import Utils from '../../stories/story-helpers/utils';
 
 const actions: AgGridToolbarAction[] = [
   {
-    clickFn: ({ api }) => {
+    clickFn: (params) => {
+      const { api } = params.event;
       const data = { id: Number((Math.random() * 1000).toFixed(0)) };
       const transaction = api.applyTransaction({ add: [data], addIndex: 0 });
       api.flashCells({ rowNodes: transaction?.add });
@@ -36,7 +38,8 @@ const actions: AgGridToolbarAction[] = [
     tooltipDisabled: 'Select a row to edit',
   },
   {
-    clickFn: ({ api }) => {
+    clickFn: (params) => {
+      const { api } = params.event;
       const rows = api.getSelectedRows();
       api.applyTransaction({ remove: rows });
     },
@@ -147,5 +150,22 @@ export const LoadingOverlay: Story = {
         api.showLoadingOverlay();
       },
     },
+  },
+};
+
+export const UpdateActionOnClick: Story = {
+  args: {
+    ...defaults,
+    actions: [
+      {
+        icon: 'home',
+        clickFn: (params) => {
+          const { action } = params;
+          const color = Utils.getRandomColor();
+          action.color = color;
+          action.tooltip = `Action color changed to ${color}`;
+        },
+      },
+    ],
   },
 };

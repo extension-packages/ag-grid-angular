@@ -6,14 +6,16 @@ export const presetActions: {
   export: {
     icon: 'file_download',
     tooltip: 'Export as csv',
-    clickFn: ({ api }) => {
+    clickFn: (params) => {
+      const { api } = params.event;
       api.exportDataAsCsv();
     },
   },
   fit: {
     icon: 'view_column',
     tooltip: 'Fit columns',
-    clickFn: ({ api }) => {
+    clickFn: (params) => {
+      const { api } = params.event;
       api.sizeColumnsToFit();
     },
   },
@@ -21,14 +23,16 @@ export const presetActions: {
     disabled: true,
     icon: 'redo',
     tooltip: 'Redo',
-    clickFn: ({ api }) => {
+    clickFn: (params) => {
+      const { api } = params.event;
       api.redoCellEditing();
     },
   },
   reset: {
     icon: 'restart_alt',
     tooltip: 'Reset columns',
-    clickFn: ({ api }) => {
+    clickFn: (params) => {
+      const { api } = params.event;
       api.resetColumnState();
     },
   },
@@ -36,7 +40,8 @@ export const presetActions: {
     disabled: true,
     icon: 'undo',
     tooltip: 'Undo',
-    clickFn: ({ api }) => {
+    clickFn: (params) => {
+      const { api } = params.event;
       api.undoCellEditing();
     },
   },
