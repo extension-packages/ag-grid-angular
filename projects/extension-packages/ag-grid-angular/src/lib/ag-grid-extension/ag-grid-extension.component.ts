@@ -11,23 +11,25 @@ import { actionsSets } from './actions-sets';
 import { AgGridEvent } from 'ag-grid-community';
 
 /**
- * Expands ag-grid with a toolbar, search and actions.
+ * Extends ag-grid with a toolbar, search and actions.
  *
  * ### Prerequisites
  *
  * - [Ag Grid Angular](https://www.ag-grid.com/angular-data-grid/getting-started/)
- * - [Material Icons font](https://fonts.google.com/icons?icon.set=Material+Icons&icon.style=Outlined)
- *   - [Setup font](https://developers.google.com/fonts/docs/material_icons#icon_font_for_the_web): add in `index.html` or similar
+ * - An icon-font of your choice. Must be included in your html and css.
  *
  * ```html
- * <html>
- *   <head>
- *     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+ * <!-- Google icon-font: https://developers.google.com/fonts/docs/material_icons -->
+ * <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
  * ```
  *
  * ## Features:
  * - Quick search
  * - Toolbar actions
+ *   - Clickable icons
+ *   - Add icon-font of your choice.
+ *     - Default: `material-icons`
+ *     - Setup: https://developers.google.com/fonts/docs/material_icons
  * - Toolbr content projection with ng-content
  *   - Content placeholders (selectors)
  *     - `toolbarLeft` => Toolbar left
@@ -54,7 +56,7 @@ import { AgGridEvent } from 'ag-grid-community';
  *
  * **Selector:** `ag-grid-extension`
  *
- * ### Global search
+ * ### Toolbar search
  *
  * #### Client side
  *
@@ -119,7 +121,7 @@ export class AgGridExtensionComponent implements AfterViewInit {
     return this.agGrid.context || this.agGrid.gridOptions?.context;
   }
 
-  get toolbarActionEvent(): AgGridEvent {
+  get event(): AgGridEvent {
     const context = this.agGrid.context || this.agGrid.gridOptions?.context;
     return { api: this.agGrid.api, context } as AgGridEvent;
   }

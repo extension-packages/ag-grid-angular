@@ -142,21 +142,19 @@ export const ContentProjections: Story = {
   }),
 };
 
-export const LoadingOverlay: Story = {
-  args: {
-    ...defaults,
-    extraGridOptions: {
-      onGridReady: ({ api }) => {
-        api.showLoadingOverlay();
-      },
-    },
-  },
-};
-
 export const UpdateActionOnClick: Story = {
   args: {
     ...defaults,
     actions: [
+      {
+        icon: 'home',
+        clickFn: (params) => {
+          const { action } = params;
+          const color = Utils.getRandomColor();
+          action.color = color;
+          action.tooltip = `Action color changed to ${color}`;
+        },
+      },
       {
         icon: 'home',
         clickFn: (params) => {

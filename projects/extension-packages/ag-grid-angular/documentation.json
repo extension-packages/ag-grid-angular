@@ -36,12 +36,12 @@
         },
         {
             "name": "AgGridToolbarAction",
-            "id": "interface-AgGridToolbarAction-9a07ed671ef2dbb2939a14f15a65e4005c17cb3fd6b065d65da1c97e10afba55ddcc34aca6bec761f74f58a90606b2cd328fc7124468763e163a8fe61804456a",
+            "id": "interface-AgGridToolbarAction-7112f4b285a5f838031425861596f679dd31fa8007171285131ff942f3c2c23a86290708833de8960759a6f3c3912e54c76c30e717323609961828cf1a3210c4",
             "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/interfaces/ag-grid-toolbar-action.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { AgGridEvent } from 'ag-grid-community';\n\nexport interface AgGridToolbarAction<TData = any, TContext = any> {\n  /** Action color */\n  color?: string;\n  /** Default: `false`. */\n  disabled?: boolean;\n  /** If no icon is provided, the `ToolbarAction` will be treated as a separator. */\n  icon?: string;\n  /** ID for toolbar action, used to set html id. */\n  id?: string;\n  /** Tooltip text. */\n  tooltip?: string;\n  /** Tooltop text for disabled action */\n  tooltipDisabled?: string;\n  /** Arrow function to execute on click. */\n  clickFn?: (event: AgGridToolbarActionClickParams<TData, TContext>) => void;\n}\n\nexport interface AgGridToolbarActionClickParams<TData = any, TContext = any> {\n  /** AgGrid Event */\n  event: AgGridEvent<TData, TContext>;\n  /** Reference to the action */\n  action: AgGridToolbarAction<TData, TContext>;\n}\n",
+            "sourceCode": "import { AgGridEvent } from 'ag-grid-community';\n\nexport interface AgGridToolbarAction<TData = any, TContext = any> {\n  /** Action color */\n  color?: string;\n  /** Default: `false`. */\n  disabled?: boolean;\n  /** If no icon is provided, the `ToolbarAction` will be treated as a separator. */\n  icon?: string;\n  /** ID for toolbar action, used to set html id. */\n  id?: string;\n  /** Tooltip text. */\n  tooltip?: string;\n  /** Tooltop text for disabled action */\n  tooltipDisabled?: string;\n  /** Arrow function to execute on click. */\n  clickFn?: (event: AgGridToolbarActionClickParams<TData, TContext>) => void;\n}\n\nexport interface AgGridToolbarActionClickParams<TData = any, TContext = any> {\n  /** AgGrid event */\n  event: AgGridEvent<TData, TContext>;\n  /** Reference to the clicked action */\n  action: AgGridToolbarAction<TData, TContext>;\n}\n",
             "properties": [
                 {
                     "name": "clickFn",
@@ -121,12 +121,12 @@
         },
         {
             "name": "AgGridToolbarActionClickParams",
-            "id": "interface-AgGridToolbarActionClickParams-9a07ed671ef2dbb2939a14f15a65e4005c17cb3fd6b065d65da1c97e10afba55ddcc34aca6bec761f74f58a90606b2cd328fc7124468763e163a8fe61804456a",
+            "id": "interface-AgGridToolbarActionClickParams-7112f4b285a5f838031425861596f679dd31fa8007171285131ff942f3c2c23a86290708833de8960759a6f3c3912e54c76c30e717323609961828cf1a3210c4",
             "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/interfaces/ag-grid-toolbar-action.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { AgGridEvent } from 'ag-grid-community';\n\nexport interface AgGridToolbarAction<TData = any, TContext = any> {\n  /** Action color */\n  color?: string;\n  /** Default: `false`. */\n  disabled?: boolean;\n  /** If no icon is provided, the `ToolbarAction` will be treated as a separator. */\n  icon?: string;\n  /** ID for toolbar action, used to set html id. */\n  id?: string;\n  /** Tooltip text. */\n  tooltip?: string;\n  /** Tooltop text for disabled action */\n  tooltipDisabled?: string;\n  /** Arrow function to execute on click. */\n  clickFn?: (event: AgGridToolbarActionClickParams<TData, TContext>) => void;\n}\n\nexport interface AgGridToolbarActionClickParams<TData = any, TContext = any> {\n  /** AgGrid Event */\n  event: AgGridEvent<TData, TContext>;\n  /** Reference to the action */\n  action: AgGridToolbarAction<TData, TContext>;\n}\n",
+            "sourceCode": "import { AgGridEvent } from 'ag-grid-community';\n\nexport interface AgGridToolbarAction<TData = any, TContext = any> {\n  /** Action color */\n  color?: string;\n  /** Default: `false`. */\n  disabled?: boolean;\n  /** If no icon is provided, the `ToolbarAction` will be treated as a separator. */\n  icon?: string;\n  /** ID for toolbar action, used to set html id. */\n  id?: string;\n  /** Tooltip text. */\n  tooltip?: string;\n  /** Tooltop text for disabled action */\n  tooltipDisabled?: string;\n  /** Arrow function to execute on click. */\n  clickFn?: (event: AgGridToolbarActionClickParams<TData, TContext>) => void;\n}\n\nexport interface AgGridToolbarActionClickParams<TData = any, TContext = any> {\n  /** AgGrid event */\n  event: AgGridEvent<TData, TContext>;\n  /** Reference to the clicked action */\n  action: AgGridToolbarAction<TData, TContext>;\n}\n",
             "properties": [
                 {
                     "name": "action",
@@ -134,9 +134,9 @@
                     "deprecationMessage": "",
                     "type": "AgGridToolbarAction<TData | TContext>",
                     "optional": false,
-                    "description": "<p>Reference to the action</p>\n",
+                    "description": "<p>Reference to the clicked action</p>\n",
                     "line": 24,
-                    "rawdescription": "\nReference to the action"
+                    "rawdescription": "\nReference to the clicked action"
                 },
                 {
                     "name": "event",
@@ -144,9 +144,9 @@
                     "deprecationMessage": "",
                     "type": "AgGridEvent<TData | TContext>",
                     "optional": false,
-                    "description": "<p>AgGrid Event</p>\n",
+                    "description": "<p>AgGrid event</p>\n",
                     "line": 22,
-                    "rawdescription": "\nAgGrid Event"
+                    "rawdescription": "\nAgGrid event"
                 }
             ],
             "indexSignatures": [],
@@ -336,12 +336,44 @@
     ],
     "guards": [],
     "interceptors": [],
-    "classes": [],
+    "classes": [
+        {
+            "name": "Utils",
+            "id": "class-Utils-6bf4b3d20543a12a4db0e76530bd9cf294a0d7f080e54c6ead7e6eca74eb7eb15e251019ce0c6a8e0c989b97ac2f9314884f4e7e04185382c4a172133e21d7dd",
+            "file": "projects/extension-packages/ag-grid-angular/src/stories/story-helpers/utils.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "class",
+            "sourceCode": "export default class Utils {\n  static getRandomColor() {\n    const colorNames = ['Red', 'Green', 'Blue', 'Yellow', 'Orange'];\n    const randomIndex = Math.floor(Math.random() * colorNames.length);\n    return colorNames[randomIndex];\n  }\n}\n",
+            "inputsClass": [],
+            "outputsClass": [],
+            "properties": [],
+            "methods": [
+                {
+                    "name": "getRandomColor",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 2,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        126
+                    ]
+                }
+            ],
+            "indexSignatures": [],
+            "extends": [],
+            "hostBindings": [],
+            "hostListeners": []
+        }
+    ],
     "directives": [],
     "components": [
         {
             "name": "AgGridExtensionComponent",
-            "id": "component-AgGridExtensionComponent-0b265f8f0083e792b428bbaae8423752f0897aeed71410efaa259388a3bc591cf38e3470864db0bd46f3fef5de51144eb99a4b05735b5e41dedc0c9fd12aed7d",
+            "id": "component-AgGridExtensionComponent-613f19c9567877e31cbcf7961c40beb6cb659c49c041993c06f40b8dfd7b86395e5f181105a8845bc362580ffdd3ebcbb95b0db15c2a421ff3fadac39fe4b4b8",
             "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/ag-grid-extension.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -367,7 +399,7 @@
                     "deprecationMessage": "",
                     "rawdescription": "\nToolbar actions",
                     "description": "<p>Toolbar actions</p>\n",
-                    "line": 104,
+                    "line": 106,
                     "type": "AgGridToolbarAction[]",
                     "decorators": []
                 },
@@ -378,7 +410,7 @@
                     "deprecationMessage": "",
                     "rawdescription": "\nDebounce in ms for seach input",
                     "description": "<p>Debounce in ms for seach input</p>\n",
-                    "line": 106,
+                    "line": 108,
                     "type": "number",
                     "decorators": []
                 },
@@ -389,7 +421,7 @@
                     "deprecationMessage": "",
                     "rawdescription": "\nDisable search field",
                     "description": "<p>Disable search field</p>\n",
-                    "line": 108,
+                    "line": 110,
                     "type": "boolean",
                     "decorators": []
                 },
@@ -400,7 +432,7 @@
                     "deprecationMessage": "",
                     "rawdescription": "\nEnable search field",
                     "description": "<p>Enable search field</p>\n",
-                    "line": 110,
+                    "line": 112,
                     "type": "boolean",
                     "decorators": []
                 },
@@ -411,7 +443,7 @@
                     "deprecationMessage": "",
                     "rawdescription": "\nSeach placeholdet text",
                     "description": "<p>Seach placeholdet text</p>\n",
-                    "line": 112,
+                    "line": 114,
                     "type": "string",
                     "decorators": []
                 }
@@ -425,7 +457,7 @@
                     "type": "AgGridAngular",
                     "optional": false,
                     "description": "",
-                    "line": 114,
+                    "line": 116,
                     "decorators": [
                         {
                             "name": "ContentChild",
@@ -444,7 +476,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 127,
+                    "line": 129,
                     "deprecated": false,
                     "deprecationMessage": ""
                 }
@@ -455,10 +487,10 @@
             "hostListeners": [],
             "standalone": false,
             "imports": [],
-            "description": "<p>Expands ag-grid with a toolbar, search and actions.</p>\n<h3>Prerequisites</h3>\n<ul>\n<li><a href=\"https://www.ag-grid.com/angular-data-grid/getting-started/\">Ag Grid Angular</a></li>\n<li><a href=\"https://fonts.google.com/icons?icon.set=Material+Icons&icon.style=Outlined\">Material Icons font</a><ul>\n<li><a href=\"https://developers.google.com/fonts/docs/material_icons#icon_font_for_the_web\">Setup font</a>: add in <code>index.html</code> or similar</li>\n</ul>\n</li>\n</ul>\n<b>Example :</b><div><pre class=\"line-numbers\"><code class=\"language-html\">&lt;html&gt;\n  &lt;head&gt;\n    &lt;link href=&quot;https://fonts.googleapis.com/icon?family=Material+Icons+Outlined&quot; rel=&quot;stylesheet&quot; /&gt;</code></pre></div><h2>Features:</h2>\n<ul>\n<li>Quick search</li>\n<li>Toolbar actions</li>\n<li>Toolbr content projection with ng-content<ul>\n<li>Content placeholders (selectors)<ul>\n<li><code>toolbarLeft</code> =&gt; Toolbar left</li>\n<li><code>toolbarCenter</code> =&gt; Toolbar center</li>\n<li><code>toolbarRight</code> =&gt; Toolbar right</li>\n<li><code>actionsLeft</code> =&gt; pre actions</li>\n<li><code>actionsRight</code> =&gt; post actions</li>\n</ul>\n</li>\n<li>Single-slot</li>\n</ul>\n</li>\n<li>Adapts to ag-grid themes</li>\n</ul>\n<h2>Component overview</h2>\n<p><strong>Class:</strong> <code>AgGridExtensionComponent</code></p>\n<p><strong>Constants:</strong></p>\n<ul>\n<li><code>actionsSets: AgGridToolbarAction[]</code> =&gt; Predefined sets of actions</li>\n<li><code>presetActions: AgGridToolbarAction</code> =&gt; Predefined single actions. Fit columns, reset columns, cvs export etc</li>\n</ul>\n<p><strong>Interfaces:</strong></p>\n<ul>\n<li><code>AgGridContext</code> =&gt; Properties this component adds to <code>gridOptions.context</code></li>\n<li><code>AgGridToolbarAction</code> =&gt; Properties for a toolbar action</li>\n</ul>\n<p><strong>Module:</strong> <code>import { AgGridExtensionModule } from &#39;@extension/ag-grid-angular&#39;;</code></p>\n<p><strong>Selector:</strong> <code>ag-grid-extension</code></p>\n<h3>Global search</h3>\n<h4>Client side</h4>\n<p>Works out of the box for client side grids.</p>\n<h4>Other row models</h4>\n<p>Use <code>context.quickFilterText</code> in custom datasource implementation <code>IServerSideDatasource</code> like below.</p>\n<b>Example :</b><div><pre class=\"line-numbers\"><code class=\"language-ts\">  // server-side example\n  export class ExampleDatasource implements IServerSideDatasource {\n      getRows(params: IServerSideGetRowsParams): void {\n        const { quickFilterText } = params.context as AgGridToolbarContext;\n        // Then use `quickFilterText` in backend call etc..\n      }\n  }</code></pre></div><h3>Code example</h3>\n<b>Example :</b><div><pre class=\"line-numbers\"><code class=\"language-ts\">&#64;Component({\n  standalone: true,\n  selector: &#39;app-demo-grid&#39;,\n  imports: [AgGridExtensionModule],\n  template: `\n    &lt;ag-grid-extension class=&quot;ag-theme-balham&quot; [actions]=&quot;actions&quot;&gt;\n      &lt;ag-grid-angular [gridOptions]=&quot;gridOptions&quot;&gt;&lt;/ag-grid-angular&gt;\n    &lt;/ag-grid-extension&gt;\n  `,\n})\nexport class DemoGridComponent {\n  actions: AgGridToolbarAction[];\n  gridOptions: GridOptions;\n}</code></pre></div>",
-            "rawdescription": "\n\nExpands ag-grid with a toolbar, search and actions.\n\n### Prerequisites\n\n- [Ag Grid Angular](https://www.ag-grid.com/angular-data-grid/getting-started/)\n- [Material Icons font](https://fonts.google.com/icons?icon.set=Material+Icons&icon.style=Outlined)\n  - [Setup font](https://developers.google.com/fonts/docs/material_icons#icon_font_for_the_web): add in `index.html` or similar\n\n```html\n<html>\n  <head>\n    <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons+Outlined\" rel=\"stylesheet\" />\n```\n\n## Features:\n- Quick search\n- Toolbar actions\n- Toolbr content projection with ng-content\n  - Content placeholders (selectors)\n    - `toolbarLeft` => Toolbar left\n    - `toolbarCenter` => Toolbar center\n    - `toolbarRight` => Toolbar right\n    - `actionsLeft` => pre actions\n    - `actionsRight` => post actions\n  - Single-slot\n- Adapts to ag-grid themes\n\n## Component overview\n\n**Class:** `AgGridExtensionComponent`\n\n**Constants:**\n- `actionsSets: AgGridToolbarAction[]` => Predefined sets of actions\n- `presetActions: AgGridToolbarAction` => Predefined single actions. Fit columns, reset columns, cvs export etc\n\n**Interfaces:**\n- `AgGridContext` => Properties this component adds to `gridOptions.context`\n- `AgGridToolbarAction` => Properties for a toolbar action\n\n**Module:** `import { AgGridExtensionModule } from '@extension/ag-grid-angular';`\n\n**Selector:** `ag-grid-extension`\n\n### Global search\n\n#### Client side\n\nWorks out of the box for client side grids.\n\n#### Other row models\n\nUse `context.quickFilterText` in custom datasource implementation `IServerSideDatasource` like below.\n\n```ts\n  // server-side example\n  export class ExampleDatasource implements IServerSideDatasource {\n      getRows(params: IServerSideGetRowsParams): void {\n        const { quickFilterText } = params.context as AgGridToolbarContext;\n        // Then use `quickFilterText` in backend call etc..\n      }\n  }\n```\n\n### Code example\n\n```ts\n@Component({\n  standalone: true,\n  selector: 'app-demo-grid',\n  imports: [AgGridExtensionModule],\n  template: `\n    <ag-grid-extension class=\"ag-theme-balham\" [actions]=\"actions\">\n      <ag-grid-angular [gridOptions]=\"gridOptions\"></ag-grid-angular>\n    </ag-grid-extension>\n  `,\n})\nexport class DemoGridComponent {\n  actions: AgGridToolbarAction[];\n  gridOptions: GridOptions;\n}\n```\n",
+            "description": "<p>Extends ag-grid with a toolbar, search and actions.</p>\n<h3>Prerequisites</h3>\n<ul>\n<li><a href=\"https://www.ag-grid.com/angular-data-grid/getting-started/\">Ag Grid Angular</a></li>\n<li>An icon-font of your choice. Must be included in your html and css.</li>\n</ul>\n<b>Example :</b><div><pre class=\"line-numbers\"><code class=\"language-html\">&lt;!-- Google icon-font: https://developers.google.com/fonts/docs/material_icons --&gt;\n&lt;link href=&quot;https://fonts.googleapis.com/icon?family=Material+Icons&quot; rel=&quot;stylesheet&quot; /&gt;</code></pre></div><h2>Features:</h2>\n<ul>\n<li>Quick search</li>\n<li>Toolbar actions<ul>\n<li>Clickable icons</li>\n<li>Add icon-font of your choice.<ul>\n<li>Default: <code>material-icons</code></li>\n<li>Setup: <a href=\"https://developers.google.com/fonts/docs/material_icons\">https://developers.google.com/fonts/docs/material_icons</a></li>\n</ul>\n</li>\n</ul>\n</li>\n<li>Toolbr content projection with ng-content<ul>\n<li>Content placeholders (selectors)<ul>\n<li><code>toolbarLeft</code> =&gt; Toolbar left</li>\n<li><code>toolbarCenter</code> =&gt; Toolbar center</li>\n<li><code>toolbarRight</code> =&gt; Toolbar right</li>\n<li><code>actionsLeft</code> =&gt; pre actions</li>\n<li><code>actionsRight</code> =&gt; post actions</li>\n</ul>\n</li>\n<li>Single-slot</li>\n</ul>\n</li>\n<li>Adapts to ag-grid themes</li>\n</ul>\n<h2>Component overview</h2>\n<p><strong>Class:</strong> <code>AgGridExtensionComponent</code></p>\n<p><strong>Constants:</strong></p>\n<ul>\n<li><code>actionsSets: AgGridToolbarAction[]</code> =&gt; Predefined sets of actions</li>\n<li><code>presetActions: AgGridToolbarAction</code> =&gt; Predefined single actions. Fit columns, reset columns, cvs export etc</li>\n</ul>\n<p><strong>Interfaces:</strong></p>\n<ul>\n<li><code>AgGridContext</code> =&gt; Properties this component adds to <code>gridOptions.context</code></li>\n<li><code>AgGridToolbarAction</code> =&gt; Properties for a toolbar action</li>\n</ul>\n<p><strong>Module:</strong> <code>import { AgGridExtensionModule } from &#39;@extension/ag-grid-angular&#39;;</code></p>\n<p><strong>Selector:</strong> <code>ag-grid-extension</code></p>\n<h3>Global search</h3>\n<h4>Client side</h4>\n<p>Works out of the box for client side grids.</p>\n<h4>Other row models</h4>\n<p>Use <code>context.quickFilterText</code> in custom datasource implementation <code>IServerSideDatasource</code> like below.</p>\n<b>Example :</b><div><pre class=\"line-numbers\"><code class=\"language-ts\">  // server-side example\n  export class ExampleDatasource implements IServerSideDatasource {\n      getRows(params: IServerSideGetRowsParams): void {\n        const { quickFilterText } = params.context as AgGridToolbarContext;\n        // Then use `quickFilterText` in backend call etc..\n      }\n  }</code></pre></div><h3>Code example</h3>\n<b>Example :</b><div><pre class=\"line-numbers\"><code class=\"language-ts\">&#64;Component({\n  standalone: true,\n  selector: &#39;app-demo-grid&#39;,\n  imports: [AgGridExtensionModule],\n  template: `\n    &lt;ag-grid-extension class=&quot;ag-theme-balham&quot; [actions]=&quot;actions&quot;&gt;\n      &lt;ag-grid-angular [gridOptions]=&quot;gridOptions&quot;&gt;&lt;/ag-grid-angular&gt;\n    &lt;/ag-grid-extension&gt;\n  `,\n})\nexport class DemoGridComponent {\n  actions: AgGridToolbarAction[];\n  gridOptions: GridOptions;\n}</code></pre></div>",
+            "rawdescription": "\n\nExtends ag-grid with a toolbar, search and actions.\n\n### Prerequisites\n\n- [Ag Grid Angular](https://www.ag-grid.com/angular-data-grid/getting-started/)\n- An icon-font of your choice. Must be included in your html and css.\n\n```html\n<!-- Google icon-font: https://developers.google.com/fonts/docs/material_icons -->\n<link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\" />\n```\n\n## Features:\n- Quick search\n- Toolbar actions\n  - Clickable icons\n  - Add icon-font of your choice.\n    - Default: `material-icons`\n    - Setup: https://developers.google.com/fonts/docs/material_icons\n- Toolbr content projection with ng-content\n  - Content placeholders (selectors)\n    - `toolbarLeft` => Toolbar left\n    - `toolbarCenter` => Toolbar center\n    - `toolbarRight` => Toolbar right\n    - `actionsLeft` => pre actions\n    - `actionsRight` => post actions\n  - Single-slot\n- Adapts to ag-grid themes\n\n## Component overview\n\n**Class:** `AgGridExtensionComponent`\n\n**Constants:**\n- `actionsSets: AgGridToolbarAction[]` => Predefined sets of actions\n- `presetActions: AgGridToolbarAction` => Predefined single actions. Fit columns, reset columns, cvs export etc\n\n**Interfaces:**\n- `AgGridContext` => Properties this component adds to `gridOptions.context`\n- `AgGridToolbarAction` => Properties for a toolbar action\n\n**Module:** `import { AgGridExtensionModule } from '@extension/ag-grid-angular';`\n\n**Selector:** `ag-grid-extension`\n\n### Global search\n\n#### Client side\n\nWorks out of the box for client side grids.\n\n#### Other row models\n\nUse `context.quickFilterText` in custom datasource implementation `IServerSideDatasource` like below.\n\n```ts\n  // server-side example\n  export class ExampleDatasource implements IServerSideDatasource {\n      getRows(params: IServerSideGetRowsParams): void {\n        const { quickFilterText } = params.context as AgGridToolbarContext;\n        // Then use `quickFilterText` in backend call etc..\n      }\n  }\n```\n\n### Code example\n\n```ts\n@Component({\n  standalone: true,\n  selector: 'app-demo-grid',\n  imports: [AgGridExtensionModule],\n  template: `\n    <ag-grid-extension class=\"ag-theme-balham\" [actions]=\"actions\">\n      <ag-grid-angular [gridOptions]=\"gridOptions\"></ag-grid-angular>\n    </ag-grid-extension>\n  `,\n})\nexport class DemoGridComponent {\n  actions: AgGridToolbarAction[];\n  gridOptions: GridOptions;\n}\n```\n",
             "type": "component",
-            "sourceCode": "import {\n  AfterViewInit,\n  ChangeDetectorRef,\n  Component,\n  ContentChild,\n  Input,\n} from '@angular/core';\nimport { AgGridAngular } from 'ag-grid-angular';\nimport { AgGridToolbarAction } from './interfaces/ag-grid-toolbar-action';\nimport { actionsSets } from './actions-sets';\nimport { AgGridEvent } from 'ag-grid-community';\n\n/**\n * Expands ag-grid with a toolbar, search and actions.\n *\n * ### Prerequisites\n *\n * - [Ag Grid Angular](https://www.ag-grid.com/angular-data-grid/getting-started/)\n * - [Material Icons font](https://fonts.google.com/icons?icon.set=Material+Icons&icon.style=Outlined)\n *   - [Setup font](https://developers.google.com/fonts/docs/material_icons#icon_font_for_the_web): add in `index.html` or similar\n *\n * ```html\n * <html>\n *   <head>\n *     <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons+Outlined\" rel=\"stylesheet\" />\n * ```\n *\n * ## Features:\n * - Quick search\n * - Toolbar actions\n * - Toolbr content projection with ng-content\n *   - Content placeholders (selectors)\n *     - `toolbarLeft` => Toolbar left\n *     - `toolbarCenter` => Toolbar center\n *     - `toolbarRight` => Toolbar right\n *     - `actionsLeft` => pre actions\n *     - `actionsRight` => post actions\n *   - Single-slot\n * - Adapts to ag-grid themes\n *\n * ## Component overview\n *\n * **Class:** `AgGridExtensionComponent`\n *\n * **Constants:**\n * - `actionsSets: AgGridToolbarAction[]` => Predefined sets of actions\n * - `presetActions: AgGridToolbarAction` => Predefined single actions. Fit columns, reset columns, cvs export etc\n *\n * **Interfaces:**\n * - `AgGridContext` => Properties this component adds to `gridOptions.context`\n * - `AgGridToolbarAction` => Properties for a toolbar action\n *\n * **Module:** `import { AgGridExtensionModule } from '@extension/ag-grid-angular';`\n *\n * **Selector:** `ag-grid-extension`\n *\n * ### Global search\n *\n * #### Client side\n *\n * Works out of the box for client side grids.\n *\n * #### Other row models\n *\n * Use `context.quickFilterText` in custom datasource implementation `IServerSideDatasource` like below.\n *\n * ```ts\n *   // server-side example\n *   export class ExampleDatasource implements IServerSideDatasource {\n *       getRows(params: IServerSideGetRowsParams): void {\n *         const { quickFilterText } = params.context as AgGridToolbarContext;\n *         // Then use `quickFilterText` in backend call etc..\n *       }\n *   }\n * ```\n *\n * ### Code example\n *\n * ```ts\n * @Component({\n *   standalone: true,\n *   selector: 'app-demo-grid',\n *   imports: [AgGridExtensionModule],\n *   template: `\n *     <ag-grid-extension class=\"ag-theme-balham\" [actions]=\"actions\">\n *       <ag-grid-angular [gridOptions]=\"gridOptions\"></ag-grid-angular>\n *     </ag-grid-extension>\n *   `,\n * })\n * export class DemoGridComponent {\n *   actions: AgGridToolbarAction[];\n *   gridOptions: GridOptions;\n * }\n * ```\n */\n@Component({\n  selector: 'ag-grid-extension',\n  templateUrl: './ag-grid-extension.component.html',\n  styleUrls: ['./ag-grid-extension.component.scss'],\n  host: { class: 'ag-theme-extension' },\n})\nexport class AgGridExtensionComponent implements AfterViewInit {\n  /** Toolbar actions */\n  @Input() actions: AgGridToolbarAction[] = actionsSets.standard;\n  /** Debounce in ms for seach input */\n  @Input() debounceSearch = 500;\n  /** Disable search field*/\n  @Input() disableSearch = false;\n  /** Enable search field*/\n  @Input() enableSearch = true;\n  /** Seach placeholdet text */\n  @Input() placeholderSearch = 'Search...';\n\n  @ContentChild(AgGridAngular) agGrid!: AgGridAngular;\n\n  constructor(private cdr: ChangeDetectorRef) {}\n\n  get context(): any {\n    return this.agGrid.context || this.agGrid.gridOptions?.context;\n  }\n\n  get toolbarActionEvent(): AgGridEvent {\n    const context = this.agGrid.context || this.agGrid.gridOptions?.context;\n    return { api: this.agGrid.api, context } as AgGridEvent;\n  }\n\n  ngAfterViewInit(): void {\n    if (!this.context) {\n      const context = { actions: this.actions };\n      this.agGrid.api.setGridOption('context', context);\n    } else {\n      this.context.actions = this.actions;\n    }\n    // agGrid changes after initializing itself\n    this.cdr.detectChanges();\n  }\n}\n",
+            "sourceCode": "import {\n  AfterViewInit,\n  ChangeDetectorRef,\n  Component,\n  ContentChild,\n  Input,\n} from '@angular/core';\nimport { AgGridAngular } from 'ag-grid-angular';\nimport { AgGridToolbarAction } from './interfaces/ag-grid-toolbar-action';\nimport { actionsSets } from './actions-sets';\nimport { AgGridEvent } from 'ag-grid-community';\n\n/**\n * Extends ag-grid with a toolbar, search and actions.\n *\n * ### Prerequisites\n *\n * - [Ag Grid Angular](https://www.ag-grid.com/angular-data-grid/getting-started/)\n * - An icon-font of your choice. Must be included in your html and css.\n *\n * ```html\n * <!-- Google icon-font: https://developers.google.com/fonts/docs/material_icons -->\n * <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\" />\n * ```\n *\n * ## Features:\n * - Quick search\n * - Toolbar actions\n *   - Clickable icons\n *   - Add icon-font of your choice.\n *     - Default: `material-icons`\n *     - Setup: https://developers.google.com/fonts/docs/material_icons\n * - Toolbr content projection with ng-content\n *   - Content placeholders (selectors)\n *     - `toolbarLeft` => Toolbar left\n *     - `toolbarCenter` => Toolbar center\n *     - `toolbarRight` => Toolbar right\n *     - `actionsLeft` => pre actions\n *     - `actionsRight` => post actions\n *   - Single-slot\n * - Adapts to ag-grid themes\n *\n * ## Component overview\n *\n * **Class:** `AgGridExtensionComponent`\n *\n * **Constants:**\n * - `actionsSets: AgGridToolbarAction[]` => Predefined sets of actions\n * - `presetActions: AgGridToolbarAction` => Predefined single actions. Fit columns, reset columns, cvs export etc\n *\n * **Interfaces:**\n * - `AgGridContext` => Properties this component adds to `gridOptions.context`\n * - `AgGridToolbarAction` => Properties for a toolbar action\n *\n * **Module:** `import { AgGridExtensionModule } from '@extension/ag-grid-angular';`\n *\n * **Selector:** `ag-grid-extension`\n *\n * ### Global search\n *\n * #### Client side\n *\n * Works out of the box for client side grids.\n *\n * #### Other row models\n *\n * Use `context.quickFilterText` in custom datasource implementation `IServerSideDatasource` like below.\n *\n * ```ts\n *   // server-side example\n *   export class ExampleDatasource implements IServerSideDatasource {\n *       getRows(params: IServerSideGetRowsParams): void {\n *         const { quickFilterText } = params.context as AgGridToolbarContext;\n *         // Then use `quickFilterText` in backend call etc..\n *       }\n *   }\n * ```\n *\n * ### Code example\n *\n * ```ts\n * @Component({\n *   standalone: true,\n *   selector: 'app-demo-grid',\n *   imports: [AgGridExtensionModule],\n *   template: `\n *     <ag-grid-extension class=\"ag-theme-balham\" [actions]=\"actions\">\n *       <ag-grid-angular [gridOptions]=\"gridOptions\"></ag-grid-angular>\n *     </ag-grid-extension>\n *   `,\n * })\n * export class DemoGridComponent {\n *   actions: AgGridToolbarAction[];\n *   gridOptions: GridOptions;\n * }\n * ```\n */\n@Component({\n  selector: 'ag-grid-extension',\n  templateUrl: './ag-grid-extension.component.html',\n  styleUrls: ['./ag-grid-extension.component.scss'],\n  host: { class: 'ag-theme-extension' },\n})\nexport class AgGridExtensionComponent implements AfterViewInit {\n  /** Toolbar actions */\n  @Input() actions: AgGridToolbarAction[] = actionsSets.standard;\n  /** Debounce in ms for seach input */\n  @Input() debounceSearch = 500;\n  /** Disable search field*/\n  @Input() disableSearch = false;\n  /** Enable search field*/\n  @Input() enableSearch = true;\n  /** Seach placeholdet text */\n  @Input() placeholderSearch = 'Search...';\n\n  @ContentChild(AgGridAngular) agGrid!: AgGridAngular;\n\n  constructor(private cdr: ChangeDetectorRef) {}\n\n  get context(): any {\n    return this.agGrid.context || this.agGrid.gridOptions?.context;\n  }\n\n  get event(): AgGridEvent {\n    const context = this.agGrid.context || this.agGrid.gridOptions?.context;\n    return { api: this.agGrid.api, context } as AgGridEvent;\n  }\n\n  ngAfterViewInit(): void {\n    if (!this.context) {\n      const context = { actions: this.actions };\n      this.agGrid.api.setGridOption('context', context);\n    } else {\n      this.context.actions = this.actions;\n    }\n    // agGrid changes after initializing itself\n    this.cdr.detectChanges();\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -480,7 +512,7 @@
                         "deprecationMessage": ""
                     }
                 ],
-                "line": 114,
+                "line": 116,
                 "jsdoctags": [
                     {
                         "name": "cdr",
@@ -504,24 +536,24 @@
                         "name": "context",
                         "type": "any",
                         "returnType": "any",
-                        "line": 118
+                        "line": 120
                     }
                 },
-                "toolbarActionEvent": {
-                    "name": "toolbarActionEvent",
+                "event": {
+                    "name": "event",
                     "getSignature": {
-                        "name": "toolbarActionEvent",
+                        "name": "event",
                         "type": "",
                         "returnType": "AgGridEvent",
-                        "line": 122
+                        "line": 124
                     }
                 }
             },
-            "templateData": "<ag-grid-toolbar\n  [agGrid]=\"agGrid\"\n  [debounceSearch]=\"debounceSearch\"\n  [disableSearch]=\"disableSearch\"\n  [enableSearch]=\"enableSearch\"\n  [placeholderSearch]=\"placeholderSearch\"\n>\n  <ng-content select=\"[toolbarLeft]\" toolbarLeft></ng-content>\n  <ng-content select=\"[toolbarCenter]\" toolbarCenter></ng-content>\n  <ng-content select=\"[toolbarRight]\" toolbarRight></ng-content>\n  <!-- Actions -->\n  <ng-content select=\"[actionsLeft]\" toolbarRight></ng-content>\n  <ng-container *ngFor=\"let action of actions\" toolbarRight>\n    <ng-container *ngIf=\"!action?.icon\">\n      <span class=\"toolbar-action-separator\"></span>\n    </ng-container>\n\n    <div [title]=\"action.disabled ? action.tooltipDisabled || '' : ''\">\n      <ag-grid-toolbar-action\n        *ngIf=\"action?.icon\"\n        [color]=\"action?.color\"\n        [disabled]=\"action?.disabled || false\"\n        [icon]=\"action.icon\"\n        [id]=\"action.id\"\n        [tooltip]=\"action.tooltip || ''\"\n        (click)=\"action?.clickFn?.({ event: toolbarActionEvent, action })\"\n      ></ag-grid-toolbar-action>\n    </div>\n  </ng-container>\n  <ng-content select=\"[actionsRight]\" toolbarRight></ng-content>\n  <!-- Actions END -->\n</ag-grid-toolbar>\n<div class=\"ag-grid-content\">\n  <ng-content>\n    <!-- ag-grid-angular -->\n  </ng-content>\n</div>\n"
+            "templateData": "<ag-grid-toolbar\n  [agGrid]=\"agGrid\"\n  [debounceSearch]=\"debounceSearch\"\n  [disableSearch]=\"disableSearch\"\n  [enableSearch]=\"enableSearch\"\n  [placeholderSearch]=\"placeholderSearch\"\n>\n  <ng-content select=\"[toolbarLeft]\" toolbarLeft></ng-content>\n  <ng-content select=\"[toolbarCenter]\" toolbarCenter></ng-content>\n  <ng-content select=\"[toolbarRight]\" toolbarRight></ng-content>\n  <!-- Actions -->\n  <ng-content select=\"[actionsLeft]\" toolbarRight></ng-content>\n  <ng-container *ngFor=\"let action of actions\" toolbarRight>\n    <ng-container *ngIf=\"!action?.icon\">\n      <span class=\"toolbar-action-separator\"></span>\n    </ng-container>\n\n    <div [title]=\"action.disabled ? action.tooltipDisabled || '' : ''\">\n      <ag-grid-toolbar-action\n        *ngIf=\"action?.icon\"\n        [color]=\"action?.color\"\n        [disabled]=\"action?.disabled || false\"\n        [icon]=\"action.icon\"\n        [id]=\"action.id\"\n        [tooltip]=\"action.tooltip || ''\"\n        (click)=\"action?.clickFn?.({ action, event })\"\n      ></ag-grid-toolbar-action>\n    </div>\n  </ng-container>\n  <ng-content select=\"[actionsRight]\" toolbarRight></ng-content>\n  <!-- Actions END -->\n</ag-grid-toolbar>\n<div class=\"ag-grid-content\">\n  <ng-content>\n    <!-- ag-grid-angular -->\n  </ng-content>\n</div>\n"
         },
         {
             "name": "AgGridToolbarActionComponent",
-            "id": "component-AgGridToolbarActionComponent-4275df45a21c8884a4de89bd0f2a427e664d81a1eb300a2dfa0bcd62640c673b6c1595789b3116de25e423af40b7ccab45a06e02e93b8fe413acfe48bc4edefd",
+            "id": "component-AgGridToolbarActionComponent-b52850f261e1f998cbe12bdb88496d489c3dd9384a2b98504e8473334eb0c81c5fa212ec7c36ff3925259b1b25d5b11fadd37a7fc545ecb12e99e7bb230be71c",
             "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/components/ag-grid-toolbar-action/ag-grid-toolbar-action.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -559,9 +591,20 @@
                     "name": "icon",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "rawdescription": "\nIcon name. Example `home`\n- Material icons: https://fonts.google.com/icons\n\n### Requirements\n```html\nAdd this to your html:\n<html>\n  <head>\n    <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons+Outlined\" rel=\"stylesheet\" />\n  </head>\n<html>\n```\n",
-                    "description": "<p>Icon name. Example <code>home</code></p>\n<ul>\n<li>Material icons: <a href=\"https://fonts.google.com/icons\">https://fonts.google.com/icons</a></li>\n</ul>\n<h3>Requirements</h3>\n<b>Example :</b><div><pre class=\"line-numbers\"><code class=\"language-html\">Add this to your html:\n&lt;html&gt;\n  &lt;head&gt;\n    &lt;link href=&quot;https://fonts.googleapis.com/icon?family=Material+Icons+Outlined&quot; rel=&quot;stylesheet&quot; /&gt;\n  &lt;/head&gt;\n&lt;html&gt;</code></pre></div>",
-                    "line": 26,
+                    "rawdescription": "\nIcon name. Example `home`\n\n\n### Requirements\n\nNeeds to have a font class included in your html and css.\n\n**With Google icons:**\n```html\n<!-- Add this to your html: -->\n<html>\n  <head>\n    <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\" />\n  </head>\n<html>\n\nAnd set `iconFont: 'material-icons'`\n```\n",
+                    "description": "<p>Icon name. Example <code>home</code></p>\n<h3>Requirements</h3>\n<p>Needs to have a font class included in your html and css.</p>\n<p><strong>With Google icons:</strong></p>\n<b>Example :</b><div><pre class=\"line-numbers\"><code class=\"language-html\">&lt;!-- Add this to your html: --&gt;\n&lt;html&gt;\n  &lt;head&gt;\n    &lt;link href=&quot;https://fonts.googleapis.com/icon?family=Material+Icons&quot; rel=&quot;stylesheet&quot; /&gt;\n  &lt;/head&gt;\n&lt;html&gt;\n\nAnd set `iconFont: &#39;material-icons&#39;`</code></pre></div>",
+                    "line": 39,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "iconFont",
+                    "defaultValue": "'material-icons'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "rawdescription": "\nA font class for the icon. Default: `material-icons`.\n\nThe font needs to be included in your html and css.\n\n**Example font setup:**\n- https://developers.google.com/fonts/docs/material_icons#icon_font_for_the_web",
+                    "description": "<p>A font class for the icon. Default: <code>material-icons</code>.</p>\n<p>The font needs to be included in your html and css.</p>\n<p><strong>Example font setup:</strong></p>\n<ul>\n<li><a href=\"https://developers.google.com/fonts/docs/material_icons#icon_font_for_the_web\">https://developers.google.com/fonts/docs/material_icons#icon_font_for_the_web</a></li>\n</ul>\n",
+                    "line": 17,
                     "type": "string",
                     "decorators": []
                 },
@@ -571,7 +614,7 @@
                     "deprecationMessage": "",
                     "rawdescription": "\nID for toolbar action, used to set html id",
                     "description": "<p>ID for toolbar action, used to set html id</p>\n",
-                    "line": 12,
+                    "line": 19,
                     "type": "string",
                     "decorators": []
                 },
@@ -579,7 +622,7 @@
                     "name": "tooltip",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 27,
+                    "line": 40,
                     "type": "string",
                     "decorators": []
                 }
@@ -596,7 +639,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, Input } from '@angular/core';\n\n@Component({\n  selector: 'ag-grid-toolbar-action',\n  templateUrl: './ag-grid-toolbar-action.component.html',\n  styleUrls: ['./ag-grid-toolbar-action.component.scss'],\n})\nexport class AgGridToolbarActionComponent {\n  @Input() color?: string;\n  @Input() disabled?: boolean;\n  /** ID for toolbar action, used to set html id */\n  @Input() id?: string;\n  /** Icon name. Example `home`\n   * - Material icons: https://fonts.google.com/icons\n   *\n   * ### Requirements\n   * ```html\n   * Add this to your html:\n   * <html>\n   *   <head>\n   *     <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons+Outlined\" rel=\"stylesheet\" />\n   *   </head>\n   * <html>\n   * ```\n   */\n  @Input() icon?: string;\n  @Input() tooltip?: string;\n}\n",
+            "sourceCode": "import { Component, Input } from '@angular/core';\n\n@Component({\n  selector: 'ag-grid-toolbar-action',\n  templateUrl: './ag-grid-toolbar-action.component.html',\n  styleUrls: ['./ag-grid-toolbar-action.component.scss'],\n})\nexport class AgGridToolbarActionComponent {\n  @Input() color?: string;\n  @Input() disabled?: boolean;\n  /** A font class for the icon. Default: `material-icons`.\n   *\n   * The font needs to be included in your html and css.\n   *\n   * **Example font setup:**\n   * - https://developers.google.com/fonts/docs/material_icons#icon_font_for_the_web */\n  @Input() iconFont = 'material-icons';\n  /** ID for toolbar action, used to set html id */\n  @Input() id?: string;\n  /** Icon name. Example `home`\n   *\n   *\n   * ### Requirements\n   *\n   * Needs to have a font class included in your html and css.\n   *\n   * **With Google icons:**\n   * ```html\n   * <!-- Add this to your html: -->\n   * <html>\n   *   <head>\n   *     <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\" />\n   *   </head>\n   * <html>\n   *\n   * And set `iconFont: 'material-icons'`\n   * ```\n   */\n  @Input() icon?: string;\n  @Input() tooltip?: string;\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -606,7 +649,7 @@
             ],
             "stylesData": "",
             "extends": [],
-            "templateData": "<span\n  class=\"toolbar-action material-icons-outlined\"\n  [class.disabled]=\"disabled\"\n  [id]=\"id\"\n  [style.color]=\"disabled ? '' : color\"\n  [title]=\"tooltip\"\n>\n  {{ icon }}<ng-content></ng-content>\n</span>\n"
+            "templateData": "<span\n  class=\"toolbar-action\"\n  [class.disabled]=\"disabled\"\n  [id]=\"id\"\n  [ngClass]=\"iconFont\"\n  [style.color]=\"disabled ? '' : color\"\n  [title]=\"tooltip\"\n>\n  {{ icon }}<ng-content></ng-content>\n</span>\n"
         },
         {
             "name": "AgGridToolbarComponent",
@@ -985,16 +1028,6 @@
                 "defaultValue": "[]"
             },
             {
-                "name": "LoadingOverlay",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
-                "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/ag-grid-extension.stories.ts",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "type": "Story",
-                "defaultValue": "{\n  args: {\n    ...defaults,\n    extraGridOptions: {\n      onGridReady: ({ api }) => {\n        api.showLoadingOverlay();\n      },\n    },\n  },\n}"
-            },
-            {
                 "name": "meta",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
@@ -1052,6 +1085,16 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "any"
+            },
+            {
+                "name": "UpdateActionOnClick",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/ag-grid-extension.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\n  args: {\n    ...defaults,\n    actions: [\n      {\n        icon: 'home',\n        clickFn: (params) => {\n          const { action } = params;\n          const color = Utils.getRandomColor();\n          action.color = color;\n          action.tooltip = `Action color changed to ${color}`;\n        },\n      },\n      {\n        icon: 'home',\n        clickFn: (params) => {\n          const { action } = params;\n          const color = Utils.getRandomColor();\n          action.color = color;\n          action.tooltip = `Action color changed to ${color}`;\n        },\n      },\n    ],\n  },\n}"
             }
         ],
         "functions": [
@@ -1151,16 +1194,6 @@
                     "defaultValue": "{\n  actions: actionsSets.standard,\n  debounceSearch: 500,\n  disableSearch: false,\n  enableSearch: true,\n  placeholderSearch: 'Search..',\n}"
                 },
                 {
-                    "name": "LoadingOverlay",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/ag-grid-extension.stories.ts",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "Story",
-                    "defaultValue": "{\n  args: {\n    ...defaults,\n    extraGridOptions: {\n      onGridReady: ({ api }) => {\n        api.showLoadingOverlay();\n      },\n    },\n  },\n}"
-                },
-                {
                     "name": "meta",
                     "ctype": "miscellaneous",
                     "subtype": "variable",
@@ -1179,6 +1212,16 @@
                     "deprecationMessage": "",
                     "type": "Story",
                     "defaultValue": "{\n  args: {\n    ...defaults,\n    actions: actions,\n  },\n}"
+                },
+                {
+                    "name": "UpdateActionOnClick",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/ag-grid-extension.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\n  args: {\n    ...defaults,\n    actions: [\n      {\n        icon: 'home',\n        clickFn: (params) => {\n          const { action } = params;\n          const color = Utils.getRandomColor();\n          action.color = color;\n          action.tooltip = `Action color changed to ${color}`;\n        },\n      },\n      {\n        icon: 'home',\n        clickFn: (params) => {\n          const { action } = params;\n          const color = Utils.getRandomColor();\n          action.color = color;\n          action.tooltip = `Action color changed to ${color}`;\n        },\n      },\n    ],\n  },\n}"
                 }
             ],
             "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/actions-sets.ts": [
@@ -1431,16 +1474,6 @@
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
-                "name": "LoadingOverlay",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/ag-grid-extension.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
                 "name": "meta",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
@@ -1457,12 +1490,22 @@
                 "status": "low"
             },
             {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/ag-grid-extension.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "UpdateActionOnClick",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
                 "filePath": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-extension/components/ag-grid-toolbar-action/ag-grid-toolbar-action.component.ts",
                 "type": "component",
                 "linktype": "component",
                 "name": "AgGridToolbarActionComponent",
-                "coveragePercent": 33,
-                "coverageCount": "2/6",
+                "coveragePercent": 42,
+                "coverageCount": "3/7",
                 "status": "medium"
             },
             {
@@ -1616,6 +1659,15 @@
                 "name": "gridOptionsService",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/stories/story-helpers/utils.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "Utils",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
                 "status": "low"
             }
         ]
