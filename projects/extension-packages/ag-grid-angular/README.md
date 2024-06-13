@@ -11,8 +11,8 @@ Extends ag-grid with a toolbar, search and actions.
 ### Prerequisites
 
 - [Ag Grid Angular](https://www.ag-grid.com/angular-data-grid/getting-started/)
-
-- An icon-font of your choice. Must be included in your html and css.
+- (Optional) Add icon-font(s) of your choice. Must be included in your html and css.
+  - Default: `ag-icon` => https://www.ag-grid.com/angular-data-grid/custom-icons/#provided-icons
 
 ```html
 <!-- Google icon-font: https://developers.google.com/fonts/docs/material_icons -->
@@ -24,9 +24,9 @@ Extends ag-grid with a toolbar, search and actions.
 - Quick search
 - Toolbar actions
   - Clickable icons
-  - Add icon-font of your choice.
-    - Default: material-icons
-    - Setup: https://developers.google.com/fonts/docs/material_icons
+  - (Optional) Add icon-font(s) of your choice.
+    - Default: ag-icon
+    - Google material icons: https://developers.google.com/fonts/docs/material_icons
 - Content projections
   - Multi-slot
     - toolbarLeft => Toolbar left

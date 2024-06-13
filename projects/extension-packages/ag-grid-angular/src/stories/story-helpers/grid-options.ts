@@ -14,7 +14,7 @@ gridOptions.columnDefs = [
     headerCheckboxSelectionFilteredOnly: true,
     minWidth: 35,
     suppressCellFlash: true,
-    width: 35,
+    width: 50,
   },
   ...gridOptionsService.getColDefs(),
 ];
@@ -22,8 +22,8 @@ gridOptions.rowData = datasourceService.generateItems(15);
 gridOptions.onSelectionChanged = (event: AgGridEvent<any, AgGridContext>) => {
   const { api, context } = event;
   const nodes = api.getSelectedNodes();
-  const deleteAction = context.actions?.find(({ icon }) => icon === 'delete');
-  const editAction = context.actions?.find(({ icon }) => icon === 'edit');
+  const deleteAction = context.actions?.find(({ icon }) => icon === 'cancel');
+  const editAction = context.actions?.find(({ icon }) => icon === 'eye');
   if (deleteAction) {
     deleteAction.disabled = nodes.length === 0;
   }
@@ -33,8 +33,8 @@ gridOptions.onSelectionChanged = (event: AgGridEvent<any, AgGridContext>) => {
 };
 gridOptions.onCellValueChanged = (event: AgGridEvent<any, AgGridContext>) => {
   const { api, context } = event;
-  const redoAction = context.actions?.find(({ icon }) => icon === 'redo');
-  const undoAction = context.actions?.find(({ icon }) => icon === 'undo');
+  const redoAction = context.actions?.find(({ icon }) => icon === 'left');
+  const undoAction = context.actions?.find(({ icon }) => icon === 'right');
   if (redoAction) {
     redoAction.disabled = api.getCurrentRedoSize() === 0;
   }

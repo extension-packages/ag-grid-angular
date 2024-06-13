@@ -7,6 +7,11 @@ export interface AgGridToolbarAction<TData = any, TContext = any> {
   disabled?: boolean;
   /** If no icon is provided, the `ToolbarAction` will be treated as a separator. */
   icon?: string;
+  /** A font class for the icon. Default: `ag-icon`
+   *
+   * Default icons: https://www.ag-grid.com/angular-data-grid/custom-icons/#provided-icons
+   */
+  iconFont?: string;
   /** ID for toolbar action, used to set html id. */
   id?: string;
   /** Tooltip text. */

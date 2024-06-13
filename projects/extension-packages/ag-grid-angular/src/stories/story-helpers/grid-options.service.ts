@@ -8,11 +8,11 @@ export class GridOptionsService {
   };
 
   getColDefs = (): ColDef[] => [
-    { field: 'id', width: 50 },
+    { field: 'id', width: 55 },
     { field: 'brand' },
     { field: 'model' },
     { field: 'price', width: 90 },
-    { field: 'isNew', width: 70 },
+    { field: 'isNew', width: 80 },
   ];
 
   core = (): GridOptions => {

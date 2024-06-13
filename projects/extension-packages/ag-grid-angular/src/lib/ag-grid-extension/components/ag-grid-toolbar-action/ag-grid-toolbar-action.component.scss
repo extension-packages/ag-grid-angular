@@ -6,6 +6,8 @@
 .toolbar-action {
   color: var(--ag-secondary-foreground-color);
   font-size: 24px;
+  height: unset;
+  width: unset;
   padding: 8px;
   user-select: none;
   &.disabled {

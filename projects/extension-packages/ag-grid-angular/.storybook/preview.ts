@@ -4,7 +4,7 @@ import docJson from '../documentation.json';
 setCompodocJson(docJson);
 
 const preview: Preview = {
-  args: { agTheme: 'ag-theme-balham' },
+  args: { agTheme: 'ag-theme-alpine' },
   argTypes: {
     agTheme: {
       control: { type: 'radio' },

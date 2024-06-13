@@ -8,13 +8,13 @@ import { Component, Input } from '@angular/core';
 export class AgGridToolbarActionComponent {
   @Input() color?: string;
   @Input() disabled?: boolean;
-  /** A font class for the icon. Default: `material-icons`.
+  /** A font class for the icon. Default: `ag-icon`.
    *
    * The font needs to be included in your html and css.
    *
    * **Example font setup:**
    * - https://developers.google.com/fonts/docs/material_icons#icon_font_for_the_web */
-  @Input() iconFont = 'material-icons';
+  @Input() iconFont = 'ag-icon';
   /** ID for toolbar action, used to set html id */
   @Input() id?: string;
   /** Icon name. Example `home`
