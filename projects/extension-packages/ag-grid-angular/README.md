@@ -11,8 +11,9 @@ Extends ag-grid with a toolbar, search and actions.
 ### Prerequisites
 
 - [Ag Grid Angular](https://www.ag-grid.com/angular-data-grid/getting-started/)
-
-- An icon-font of your choice. Must be included in your html and css.
+- (Optional) Add icon-font(s) of your choice. Must be included in your html and css.
+  - Default: `ag-icon`
+    - https://www.ag-grid.com/angular-data-grid/custom-icons/#provided-icons
 
 ```html
 <!-- Google icon-font: https://developers.google.com/fonts/docs/material_icons -->
@@ -24,9 +25,9 @@ Extends ag-grid with a toolbar, search and actions.
 - Quick search
 - Toolbar actions
   - Clickable icons
-  - Add icon-font of your choice.
-    - Default: material-icons
-    - Setup: https://developers.google.com/fonts/docs/material_icons
+    - Default: `ag-icon` https://www.ag-grid.com/angular-data-grid/custom-icons/#provided-icons
+    - (Optional) Add icon-font(s) of your choice.
+      - Google material icons: https://developers.google.com/fonts/docs/material_icons
 - Content projections
   - Multi-slot
     - toolbarLeft => Toolbar left
@@ -51,7 +52,28 @@ Extends ag-grid with a toolbar, search and actions.
   `,
 })
 export class DemoGridComponent {
-  actions: AgGridToolbarAction[];
+  actions: AgGridToolbarAction = [
+    {
+      color: "seagreen",
+      icon: "plus",
+      tooltip: "Add new row",
+      clickFn: (event) => {
+        const rowData = {...};
+        event.api.applyTransaction({ add: [rowData], addIndex: 0 });
+      }
+    },
+    {
+      color: "dodgerblue",
+      icon: "eye",
+      tooltip: "Edit row",
+      clickFn: ({ api, context }) => {
+        const rowData = api.getSelectedRows()[0];
+        // ... some logic
+      }
+    },
+    {}, // seprator
+    ...
+  ];
   gridOptions: GridOptions;
 }
 ```

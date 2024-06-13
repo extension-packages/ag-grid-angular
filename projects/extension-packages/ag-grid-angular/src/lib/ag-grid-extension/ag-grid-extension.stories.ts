@@ -13,7 +13,6 @@ import {
   actionsSets,
 } from '../../public-api';
 import { gridOptions } from '../../stories/story-helpers/grid-options';
-import Utils from '../../stories/story-helpers/utils';
 
 const actions: AgGridToolbarAction[] = [
   {
@@ -24,7 +23,7 @@ const actions: AgGridToolbarAction[] = [
       api.flashCells({ rowNodes: transaction?.add });
     },
     color: 'seagreen',
-    icon: 'add_circle',
+    icon: 'plus',
     tooltip: 'Add new row',
   },
   {
@@ -33,7 +32,7 @@ const actions: AgGridToolbarAction[] = [
     },
     color: 'dodgerblue',
     disabled: true,
-    icon: 'edit',
+    icon: 'eye',
     tooltip: 'Edit',
     tooltipDisabled: 'Select a row to edit',
   },
@@ -45,12 +44,10 @@ const actions: AgGridToolbarAction[] = [
     },
     color: 'crimson',
     disabled: true,
-    icon: 'delete',
+    icon: 'cancel',
     tooltip: 'Delete selected row(s)',
     tooltipDisabled: 'Select row(s) to delete',
   },
-  {},
-  ...actionsSets.redoUndo,
   {},
   ...actionsSets.standard,
 ];
@@ -115,7 +112,7 @@ export const SeachAndActions: Story = {
 export const ContentProjections: Story = {
   args: {
     ...defaults,
-    actions: actions,
+    actions: [{}, ...actions, {}],
   },
   render: (args) => ({
     props: {
@@ -125,16 +122,16 @@ export const ContentProjections: Story = {
     template: `
     <ag-grid-extension
       [class]="agTheme"
-      [actions]="actions"
+      [actions]="null"
       [disableSearch]="disableSearch"
       [debounceSearch]="debounceSearch"
       [enableSearch]="enableSearch"
       [placeholderSearch]="placeholderSearch">
       <div toolbarLeft>toolbarLeft</div>
       <div toolbarCenter>toolbarCenter</div>
-      <div toolbarRight>toolbarRight</div>
-      <ag-grid-toolbar-action actionsLeft tooltip="I'm here because of *actionsLeft* content projection">arrow_left</ag-grid-toolbar-action>
-      <ag-grid-toolbar-action actionsRight tooltip="I'm here because of *actionsRight* content projection">arrow_right</ag-grid-toolbar-action>
+      <div toolbarRight>toolbarRight &nbsp;</div>
+      <div actionsLeft>actionsLeft &nbsp;</div>
+      <div actionsRight>actionsRight &nbsp;</div>
 
       <ag-grid-angular [gridOptions]="gridOptions"></ag-grid-angular>
     </ag-grid-extension>
@@ -147,23 +144,42 @@ export const UpdateActionOnClick: Story = {
     ...defaults,
     actions: [
       {
-        icon: 'home',
+        icon: 'radio-button-off',
         clickFn: (params) => {
           const { action } = params;
-          const color = Utils.getRandomColor();
-          action.color = color;
-          action.tooltip = `Action color changed to ${color}`;
+          if (action.icon === 'radio-button-off') {
+            action.icon = 'radio-button-on';
+            action.color = 'seagreen';
+          } else {
+            action.icon = 'radio-button-off';
+            action.color = '';
+          }
+          action.tooltip = `Action icon changed to ${action.icon}`;
         },
       },
+      {},
       {
-        icon: 'home',
+        icon: 'checkbox-unchecked',
         clickFn: (params) => {
           const { action } = params;
-          const color = Utils.getRandomColor();
-          action.color = color;
-          action.tooltip = `Action color changed to ${color}`;
+          if (action.icon === 'checkbox-unchecked') {
+            action.icon = 'checkbox-checked';
+            action.color = 'seagreen';
+          } else if (action.icon === 'checkbox-checked') {
+            action.icon = 'checkbox-indeterminate';
+            action.color = 'orange';
+          } else {
+            action.icon = 'checkbox-unchecked';
+            action.color = '';
+          }
+          action.tooltip = `Action icon changed to ${action.icon}`;
         },
       },
     ],
+    extraGridOptions: {
+      onFirstDataRendered: (params) => {
+        params.api.getDisplayedRowAtIndex(0)?.setSelected(true);
+      },
+    },
   },
 };

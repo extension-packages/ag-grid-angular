@@ -16,7 +16,8 @@ import { AgGridEvent } from 'ag-grid-community';
  * ### Prerequisites
  *
  * - [Ag Grid Angular](https://www.ag-grid.com/angular-data-grid/getting-started/)
- * - An icon-font of your choice. Must be included in your html and css.
+ * - (Optional) Add icon-font(s) of your choice. Must be included in your html and css.
+ *   - Default: `ag-icon`
  *
  * ```html
  * <!-- Google icon-font: https://developers.google.com/fonts/docs/material_icons -->

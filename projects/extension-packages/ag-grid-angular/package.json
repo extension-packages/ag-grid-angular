@@ -1,6 +1,6 @@
 {
   "name": "@extension-packages/ag-grid-angular",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0",
