@@ -1,0 +1,32 @@
+:host {
+  /* Prevent click event on "host" when .disabled */
+  display: contents;
+  --ag-toolbar-action-color: #444;
+  --ag-toolbar-action-disabled-color: #aaa;
+  --ag-toolbar-action-hover-color: #eee;
+  --ag-toolbar-action-active-color: #ddd;
+}
+
+.toolbar-action {
+  color: var(--ag-toolbar-action-color);
+  font-size: 24px;
+  height: unset;
+  width: unset;
+  padding: 8px;
+  user-select: none;
+}
+
+.toolbar-action.disabled {
+  pointer-events: none;
+  color: var(--ag-toolbar-action-disabled-color);
+}
+
+.toolbar-action:hover {
+  cursor: pointer;
+  border-radius: 3px;
+  background: var(--ag-toolbar-action-hover-color);
+}
+
+.toolbar-action:active {
+  background: var(--ag-toolbar-action-active-color);
+}

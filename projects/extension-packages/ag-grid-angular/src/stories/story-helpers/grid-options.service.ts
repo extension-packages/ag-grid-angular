@@ -4,7 +4,7 @@ import { ColDef, GridOptions } from 'ag-grid-community';
 @Injectable({ providedIn: 'root' })
 export class GridOptionsService {
   getDefaultColDef = (): ColDef => {
-    return { editable: true, sortable: true };
+    return { editable: true, enableCellChangeFlash: true, sortable: true };
   };
 
   getColDefs = (): ColDef[] => [
@@ -17,12 +17,14 @@ export class GridOptionsService {
 
   core = (): GridOptions => {
     return {
+      context: {},
       defaultColDef: this.getDefaultColDef(),
-      enableCellChangeFlash: true,
       getRowId: (params) => {
-        return params.data['id'];
+        return String(params.data['id']);
       },
-      rowSelection: 'single',
+      rowSelection: {
+        mode: 'singleRow',
+      },
       undoRedoCellEditing: true,
     };
   };

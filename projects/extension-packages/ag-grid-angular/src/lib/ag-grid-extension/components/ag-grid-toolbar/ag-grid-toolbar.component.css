@@ -1,7 +1,7 @@
 .ag-grid-toolbar {
   align-items: center;
   background: var(--ag-header-background-color);
-  border: var(--ag-borders) var(--ag-border-color);
+  border: var(--ag-wrapper-border);
   border-top-left-radius: var(--ag-wrapper-border-radius);
   border-top-right-radius: var(--ag-wrapper-border-radius);
   border-bottom: none;
@@ -9,6 +9,7 @@
   height: 48px;
   overflow-x: auto;
 }
+
 .ag-grid-toolbar-content {
   align-items: center;
   display: flex;
@@ -16,19 +17,21 @@
   justify-content: space-between;
   padding: 0px 8px;
   width: 100%;
+}
 
-  &-left {
-    align-items: center;
-    display: flex;
-    gap: 8px;
-  }
-  &-center {
-    align-items: center;
-    display: flex;
-    gap: 8px;
-  }
-  &-right {
-    align-items: center;
-    display: flex;
-  }
+.ag-grid-toolbar-content-left {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.ag-grid-toolbar-content-center {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.ag-grid-toolbar-content-right {
+  align-items: center;
+  display: flex;
 }

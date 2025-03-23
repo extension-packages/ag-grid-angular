@@ -4,7 +4,7 @@ export const presetActions: {
   [key in 'export' | 'fit' | 'reset']: AgGridToolbarAction;
 } = {
   export: {
-    icon: 'csv',
+    icon: 'file_download',
     tooltip: 'Export as csv',
     clickFn: (params) => {
       const { api } = params.event;
@@ -12,7 +12,7 @@ export const presetActions: {
     },
   },
   fit: {
-    icon: 'arrows',
+    icon: 'view_column',
     tooltip: 'Fit columns',
     clickFn: (params) => {
       const { api } = params.event;
@@ -20,7 +20,7 @@ export const presetActions: {
     },
   },
   reset: {
-    icon: 'columns',
+    icon: 'history',
     tooltip: 'Reset columns',
     clickFn: (params) => {
       const { api } = params.event;

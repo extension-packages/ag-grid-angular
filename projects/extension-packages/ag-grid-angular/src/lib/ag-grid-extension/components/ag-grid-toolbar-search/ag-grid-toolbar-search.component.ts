@@ -1,41 +1,49 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 
 let timer: any;
 @Component({
   selector: 'ag-grid-toolbar-search',
-  templateUrl: './ag-grid-toolbar-search.component.html',
-  styleUrls: ['./ag-grid-toolbar-search.component.scss'],
+  standalone: true,
+  styleUrls: ['./ag-grid-toolbar-search.component.css'],
+  template: `
+    <input
+      type="search"
+      [disabled]="disabled()"
+      [placeholder]="placeholder()"
+      (keyup)="onSearch($event)"
+      (search)="onSearch($event)"
+    />
+  `,
 })
 export class AgGridToolbarSearchComponent {
-  @Input() agGrid!: AgGridAngular;
-  @Input() debounceTime = 500;
-  @Input() disabled = false;
-  @Input() placeholder = 'Search...';
+  readonly agGrid = input.required<AgGridAngular>();
+  readonly debounceTime = input(500);
+  readonly disabled = input(false);
+  readonly placeholder = input('Search...');
 
   get context(): { quickFilterText: string } {
-    return this.agGrid.context || this.agGrid.gridOptions?.context;
+    const agGrid = this.agGrid();
+    return agGrid.context || agGrid.gridOptions?.context;
   }
 
   onSearch({ target }: any) {
-    const { api } = this.agGrid;
+    const { api } = this.agGrid();
     clearTimeout(timer);
     timer = setTimeout(() => {
-      const type = api.getModel().getType();
-      if (type === 'serverSide') {
+      const rowModelType = api.getGridOption('rowModelType');
+      if (rowModelType === 'serverSide') {
         this.setQuickFilter(target.value);
         api.onFilterChanged();
       } else {
-        api.setQuickFilter(target.value);
+        api.setGridOption('quickFilterText', target.value);
         this.setQuickFilter(target.value);
       }
-      if (
-        this.agGrid.gridOptions?.rowSelection !== 'multiple' &&
-        this.agGrid.rowSelection !== 'multiple'
-      ) {
+      const rowSelection = api.getGridOption('rowSelection');
+      if (rowSelection !== 'multiple') {
         api.deselectAll();
       }
-    }, this.debounceTime);
+    }, this.debounceTime());
   }
 
   setQuickFilter(term: string) {

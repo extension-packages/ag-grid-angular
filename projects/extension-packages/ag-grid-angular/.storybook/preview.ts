@@ -8,12 +8,7 @@ const preview: Preview = {
   argTypes: {
     agTheme: {
       control: { type: 'radio' },
-      options: [
-        'ag-theme-alpine',
-        'ag-theme-balham',
-        'ag-theme-material',
-        'ag-theme-quartz',
-      ],
+      options: ['alpine', 'balham', 'material', 'quartz'],
     },
   },
   parameters: {
