@@ -1,24 +1,23 @@
 import {
-  AfterContentInit,
-  AfterViewInit,
   Component,
   contentChild,
   ElementRef,
   inject,
   input,
   output,
+  signal,
 } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { AgGridEvent } from 'ag-grid-community';
 import { firstValueFrom } from 'rxjs';
-import { actionsSets } from '../../actions-sets';
+import { agGridToolbarAction } from '../../constants/ag-grid-toolbar-actions';
+import { AgGridContext } from '../../interfaces/ag-grid-context';
 import { AgGridToolbarAction } from '../../interfaces/ag-grid-toolbar-action';
 import { AgGridToolbarActionComponent } from '../ag-grid-toolbar-action/ag-grid-toolbar-action.component';
-import { AgGridToolbarComponent } from '../ag-grid-toolbar/ag-grid-toolbar.component';
-import { AgGridContext } from '../../interfaces/ag-grid-context';
+import { AgGridToolbarSearchComponent } from '../ag-grid-toolbar-search/ag-grid-toolbar-search.component';
 
 /**
- * Extends ag-grid with a toolbar, search and actions.
+ * Adds toolbar to ag-grid, with search and actions.
  *
  * ### Prerequisites
  *
@@ -50,17 +49,16 @@ import { AgGridContext } from '../../interfaces/ag-grid-context';
  *
  * ## Component overview
  *
- * **Class:** `AgGridExtensionComponent`, `AgGridToolbarActionComponent`
+ * **Class:** `AgGridToolbarComponent`, `AgGridToolbarActionComponent`
  *
  * **Constants:**
- * - `actionsSets: AgGridToolbarAction[]` => Predefined sets of actions
- * - `presetActions: AgGridToolbarAction` => Predefined single actions. Fit columns, reset columns, cvs export etc
+ * - `agGridToolbarActions: AgGridToolbarAction` => Predefined single actions. Fit columns, reset columns, cvs export etc
  *
  * **Interfaces:**
  * - `AgGridContext` => Properties this component adds to `gridOptions.context`
  * - `AgGridToolbarAction` => Properties for a toolbar action
  *
- * **Selector:** `ag-grid-extension`
+ * **Selector:** `ag-grid-toolbar`
  *
  * ### Toolbar search
  *
@@ -88,11 +86,11 @@ import { AgGridContext } from '../../interfaces/ag-grid-context';
  * @Component({
  *   standalone: true,
  *   selector: 'app-demo-grid',
- *   imports: [AgGridModule, AgGridExtensionComponent],
+ *   imports: [AgGridModule, AgGridToolbarComponent],
  *   template: `
- *     <ag-grid-extension [actions]="actions">
+ *     <ag-grid-toolbar [actions]="actions">
  *       <ag-grid-angular [gridOptions]="gridOptions"></ag-grid-angular>
- *     </ag-grid-extension>
+ *     </ag-grid-toolbar>
  *   `,
  * })
  * export class DemoGridComponent {
@@ -102,18 +100,66 @@ import { AgGridContext } from '../../interfaces/ag-grid-context';
  * ```
  */
 @Component({
-  imports: [AgGridToolbarComponent, AgGridToolbarActionComponent],
-  selector: 'ag-grid-extension',
-  templateUrl: './ag-grid-extension.component.html',
+  imports: [AgGridToolbarSearchComponent, AgGridToolbarActionComponent],
+  selector: 'ag-grid-toolbar',
   standalone: true,
-  styleUrls: ['./ag-grid-extension.component.css'],
-  host: { class: 'ag-theme-extension' },
+  styleUrls: ['./ag-grid-toolbar.component.css'],
+  template: `
+    <div class="ag-grid-toolbar">
+      <div class="ag-grid-toolbar-content">
+        <div class="ag-grid-toolbar-content-left">
+          @if (enableSearch()) {
+            <ag-grid-toolbar-search
+              [agGrid]="agGrid()"
+              [debounceTime]="debounceSearch()"
+              [disabled]="disableSearch()"
+              [placeholder]="placeholderSearch()"
+            ></ag-grid-toolbar-search>
+          }
+          <ng-content select="[toolbarLeft]"></ng-content>
+        </div>
+        <div class="ag-grid-toolbar-content-center">
+          <ng-content select="[toolbarCenter]"></ng-content>
+        </div>
+        <div class="ag-grid-toolbar-content-right">
+          <ng-content select="[toolbarRight]"></ng-content>
+          <ng-content select="[actionsLeft]"></ng-content>
+          @for (action of actions(); track $index) {
+            @if (!action?.icon) {
+              <span class="toolbar-action-separator"></span>
+            }
+            @if (action?.icon) {
+              <!-- <div [title]="action.disabled ? action.tooltipDisabled || '' : ''"> -->
+              <ag-grid-toolbar-action
+                [color]="action?.color"
+                [disabled]="action?.disabled || false"
+                [icon]="action.icon"
+                [id]="action.id"
+                [tooltip]="action.tooltip || ''"
+                (click)="action?.clickFn?.({ action, event })"
+              ></ag-grid-toolbar-action>
+              <!-- </div> -->
+            }
+          }
+          <ng-content select="[actionsRight]"></ng-content>
+        </div>
+      </div>
+    </div>
+
+    <div class="ag-grid-content">
+      <ng-content>
+        <!-- ag-grid-angular -->
+      </ng-content>
+    </div>
+  `,
 })
-export class AgGridExtensionComponent<TData = any, TContext = any>
-  implements AfterContentInit, AfterViewInit
-{
+export class AgGridToolbarComponent<TData = any, TContext = any> {
   /** Toolbar actions */
-  readonly actions = input<AgGridToolbarAction[]>(actionsSets.standard);
+  readonly actions = input<AgGridToolbarAction[]>([
+    agGridToolbarAction.fit,
+    agGridToolbarAction.reset,
+    agGridToolbarAction.csv,
+  ]);
   /** Debounce in ms for search input */
   readonly debounceSearch = input(500);
   /** Disable search field*/
@@ -125,6 +171,9 @@ export class AgGridExtensionComponent<TData = any, TContext = any>
 
   /** Grid ready event */
   readonly gridReady = output<AgGridEvent<TData, TContext>>();
+
+  readonly gridIsReady = signal(false);
+
   /** Ag-grid component ref */
   readonly agGrid = contentChild.required(AgGridAngular);
 
@@ -135,6 +184,7 @@ export class AgGridExtensionComponent<TData = any, TContext = any>
   }
 
   get event(): AgGridEvent<TData, TContext> {
+    // this.agGrid().api.g
     return {
       api: this.agGrid().api,
       context: this.context,
@@ -143,6 +193,7 @@ export class AgGridExtensionComponent<TData = any, TContext = any>
 
   ngAfterContentInit(): void {
     firstValueFrom(this.agGrid().gridReady).then((event) => {
+      this.gridIsReady.set(true);
       if (event.context) {
         event.context.actions = this.actions();
       } else {

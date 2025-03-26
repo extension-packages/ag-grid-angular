@@ -14,12 +14,9 @@ import {
   themeMaterial,
   themeQuartz,
 } from 'ag-grid-community';
-import {
-  AgGridExtensionComponent,
-  AgGridToolbarAction,
-  actionsSets,
-} from '../../public-api';
+import { agGridToolbarAction, AgGridToolbarAction } from '../../public-api';
 import { gridOptions } from '../../stories/story-helpers/grid-options';
+import { AgGridToolbarComponent } from './components/ag-grid-toolbar/ag-grid-toolbar.component';
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const themeMap = {
@@ -64,20 +61,27 @@ const actions: AgGridToolbarAction[] = [
     tooltipDisabled: 'Select row(s) to delete',
   },
   {},
-  ...actionsSets.standard,
+  agGridToolbarAction.copySelectedRows,
+  agGridToolbarAction.fit,
+  agGridToolbarAction.reset,
+  agGridToolbarAction.csv,
 ];
 
 const defaults = {
-  actions: actionsSets.standard,
+  actions: [
+    agGridToolbarAction.fit,
+    agGridToolbarAction.reset,
+    agGridToolbarAction.csv,
+  ],
   debounceSearch: 500,
   disableSearch: false,
   enableSearch: true,
   placeholderSearch: 'Search..',
 };
 
-const meta: Meta<AgGridExtensionComponent> = {
+const meta: Meta<AgGridToolbarComponent> = {
   title: 'Ag Grid Extension',
-  component: AgGridExtensionComponent,
+  component: AgGridToolbarComponent,
   decorators: [
     componentWrapperDecorator(
       (story) => `<div style="height: 500px;">${story}</div>`,
@@ -97,7 +101,7 @@ const meta: Meta<AgGridExtensionComponent> = {
         },
       },
       template: `
-    <ag-grid-extension
+    <ag-grid-toolbar
       [actions]="actions"
       [disableSearch]="disableSearch"
       [debounceSearch]="debounceSearch"
@@ -105,7 +109,7 @@ const meta: Meta<AgGridExtensionComponent> = {
       [placeholderSearch]="placeholderSearch">
       
       <ag-grid-angular [gridOptions]="gridOptions" [theme]="themeMap[agTheme]"></ag-grid-angular>
-    </ag-grid-extension>
+    </ag-grid-toolbar>
     `,
     };
   },
@@ -114,7 +118,7 @@ const meta: Meta<AgGridExtensionComponent> = {
 
 export default meta;
 type Story = StoryObj<
-  AgGridExtensionComponent & { extraGridOptions?: GridOptions }
+  AgGridToolbarComponent & { extraGridOptions?: GridOptions }
 >;
 
 export const SearchAndActions: Story = {
@@ -136,7 +140,7 @@ export const ContentProjections: Story = {
       gridOptions,
     },
     template: `
-    <ag-grid-extension
+    <ag-grid-toolbar
       [actions]="null"
       [disableSearch]="disableSearch"
       [debounceSearch]="debounceSearch"
@@ -149,7 +153,7 @@ export const ContentProjections: Story = {
       <div actionsRight>actionsRight &nbsp;</div>
 
       <ag-grid-angular [gridOptions]="gridOptions" [theme]="themeMap[agTheme]"></ag-grid-angular>
-    </ag-grid-extension>
+    </ag-grid-toolbar>
     `,
   }),
 };
