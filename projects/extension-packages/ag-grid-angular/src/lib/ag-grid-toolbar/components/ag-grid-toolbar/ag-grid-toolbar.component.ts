@@ -100,11 +100,10 @@ import { AgGridToolbarSearchComponent } from '../ag-grid-toolbar-search/ag-grid-
  * ```
  */
 @Component({
-  imports: [AgGridToolbarSearchComponent, AgGridToolbarActionComponent],
-  selector: 'ag-grid-toolbar',
-  standalone: true,
-  styleUrls: ['./ag-grid-toolbar.component.css'],
-  template: `
+    imports: [AgGridToolbarSearchComponent, AgGridToolbarActionComponent],
+    selector: 'ag-grid-toolbar',
+    styleUrls: ['./ag-grid-toolbar.component.css'],
+    template: `
     <div class="ag-grid-toolbar">
       <div class="ag-grid-toolbar-content">
         <div class="ag-grid-toolbar-content-left">
@@ -151,7 +150,7 @@ import { AgGridToolbarSearchComponent } from '../ag-grid-toolbar-search/ag-grid-
         <!-- ag-grid-angular -->
       </ng-content>
     </div>
-  `,
+  `
 })
 export class AgGridToolbarComponent<TData = any, TContext = any> {
   /** Toolbar actions */
