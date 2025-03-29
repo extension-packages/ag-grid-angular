@@ -163,6 +163,58 @@
             "kind": 171,
             "methods": [],
             "extends": []
+        },
+        {
+            "name": "DropdownPanelSelectionChangeEvent",
+            "id": "interface-DropdownPanelSelectionChangeEvent-6ab97bc3fdbfaee4f6640cefa021c47902bd8fec27771f08a47abd440816e36c69beaeab2a4db6e8a5f0c46720521306bfa26e251fbec5e9cc5eff3eab5ace5f",
+            "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/interfaces/dropdown-selection-change-event.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "export interface DropdownSelectionChangeEvent<TData = unknown>\n  extends DropdownPanelSelectionChangeEvent<TData> {\n  /** Value when single selection */\n  value: TData | null;\n}\n\nexport interface DropdownPanelSelectionChangeEvent<TData = unknown> {\n  /** Selected item when single selection */\n  selected: TData | TData[];\n}\n",
+            "properties": [
+                {
+                    "name": "selected",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "TData | TData[]",
+                    "optional": false,
+                    "description": "<p>Selected item when single selection</p>\n",
+                    "line": 9,
+                    "rawdescription": "\nSelected item when single selection"
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 171,
+            "methods": [],
+            "extends": []
+        },
+        {
+            "name": "DropdownSelectionChangeEvent",
+            "id": "interface-DropdownSelectionChangeEvent-6ab97bc3fdbfaee4f6640cefa021c47902bd8fec27771f08a47abd440816e36c69beaeab2a4db6e8a5f0c46720521306bfa26e251fbec5e9cc5eff3eab5ace5f",
+            "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/interfaces/dropdown-selection-change-event.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "export interface DropdownSelectionChangeEvent<TData = unknown>\n  extends DropdownPanelSelectionChangeEvent<TData> {\n  /** Value when single selection */\n  value: TData | null;\n}\n\nexport interface DropdownPanelSelectionChangeEvent<TData = unknown> {\n  /** Selected item when single selection */\n  selected: TData | TData[];\n}\n",
+            "properties": [
+                {
+                    "name": "value",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "TData | null",
+                    "optional": false,
+                    "description": "<p>Value when single selection</p>\n",
+                    "line": 4,
+                    "rawdescription": "\nValue when single selection"
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 171,
+            "methods": [],
+            "extends": [
+                "DropdownPanelSelectionChangeEvent"
+            ]
         }
     ],
     "injectables": [
@@ -347,6 +399,459 @@
     "guards": [],
     "interceptors": [],
     "classes": [
+        {
+            "name": "DropdownUtils",
+            "id": "class-DropdownUtils-9119bf8864b673703d0a6904538976c13b5fec0b744373e5377cfd5aea0a2e3cef0f7fb6c74fb4094a37c6414f68da906db211389c3e4882428e4cce95b0bc76",
+            "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/utils.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "class",
+            "sourceCode": "import { GridApi } from 'ag-grid-community';\nexport class DropdownUtils {\n  static focusGridCell(api?: GridApi) {\n    if (!api) return;\n    const selectedNodes = api.getSelectedNodes();\n    const rowIndex = selectedNodes[0]?.rowIndex ?? 0;\n    const columns = api.getAllDisplayedColumns();\n    api.setFocusedCell(rowIndex, columns[0]);\n    api.ensureIndexVisible(rowIndex, 'middle');\n  }\n\n  static getSelectionType(api: GridApi): 'single' | 'multiple' | undefined {\n    const type = api.getGridOption('rowSelection');\n    if (typeof type === 'string') {\n      if (type === 'single') return 'single';\n      if (type === 'multiple') return 'multiple';\n    }\n    if (typeof type === 'object' && type !== null) {\n      if (type.mode === 'singleRow') return 'single';\n      if (type.mode === 'multiRow') return 'multiple';\n    }\n    return undefined;\n  }\n\n  static getValue<T>(data: T, valueField?: keyof T): T[keyof T] | T {\n    return valueField ? data[valueField] : data;\n  }\n\n  static getValues<T>(data: T[], valueField?: keyof T): T[keyof T][] | T[] {\n    return this.mapField(data, valueField);\n  }\n\n  static getDisplayText(data: any, displayFields: string[]): string {\n    if (!data || !displayFields) return '';\n    const items = this.normalizeData(data);\n    const baseText = this.computeBaseText(items[0], displayFields);\n    return this.appendCountSuffix(baseText, items.length);\n  }\n\n  static getRowIds(selected: any, valueField: string): string[] {\n    const normalizedData = this.normalizeData(selected);\n    return this.mapField(normalizedData, valueField).map(String);\n  }\n\n  // Private helper methods\n  private static normalizeData<T>(data: T | T[]): T[] {\n    return Array.isArray(data) ? data : [data];\n  }\n\n  private static computeBaseText(item: any, displayFields: string[]): string {\n    return typeof item === 'object' && item !== null\n      ? displayFields.map((field) => String(item[field] ?? '')).join(' - ')\n      : String(item);\n  }\n\n  private static appendCountSuffix(baseText: string, count: number): string {\n    return count > 1 ? `${baseText} + ${count - 1}` : baseText;\n  }\n\n  private static mapField<T>(data: T[], field?: keyof T): T[keyof T][] | T[] {\n    return field ? data.map((item) => item[field]) : data;\n  }\n}\n",
+            "inputsClass": [],
+            "outputsClass": [],
+            "properties": [],
+            "methods": [
+                {
+                    "name": "appendCountSuffix",
+                    "args": [
+                        {
+                            "name": "baseText",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "count",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "string",
+                    "typeParameters": [],
+                    "line": 56,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123,
+                        126
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "baseText",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "count",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "computeBaseText",
+                    "args": [
+                        {
+                            "name": "item",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "displayFields",
+                            "type": "string[]",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "string",
+                    "typeParameters": [],
+                    "line": 50,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123,
+                        126
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "item",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "displayFields",
+                            "type": "string[]",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "focusGridCell",
+                    "args": [
+                        {
+                            "name": "api",
+                            "type": "GridApi",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "optional": true
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 3,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        126
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "api",
+                            "type": "GridApi",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "optional": true,
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getDisplayText",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "displayFields",
+                            "type": "string[]",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "string",
+                    "typeParameters": [],
+                    "line": 33,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        126
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "displayFields",
+                            "type": "string[]",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getRowIds",
+                    "args": [
+                        {
+                            "name": "selected",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "valueField",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "string[]",
+                    "typeParameters": [],
+                    "line": 40,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        126
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "selected",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "valueField",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getSelectionType",
+                    "args": [
+                        {
+                            "name": "api",
+                            "type": "GridApi",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "\"single\" | \"multiple\" | undefined",
+                    "typeParameters": [],
+                    "line": 12,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        126
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "api",
+                            "type": "GridApi",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getValue",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "T",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "valueField",
+                            "type": "",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "optional": true
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": " | T",
+                    "typeParameters": [
+                        "T"
+                    ],
+                    "line": 25,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        126
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "T",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "valueField",
+                            "type": "",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "optional": true,
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getValues",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "T[]",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "valueField",
+                            "type": "",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "optional": true
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "[] | []",
+                    "typeParameters": [
+                        "T"
+                    ],
+                    "line": 29,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        126
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "T[]",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "valueField",
+                            "type": "",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "optional": true,
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "mapField",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "T[]",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "field",
+                            "type": "",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "optional": true
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "[] | []",
+                    "typeParameters": [
+                        "T"
+                    ],
+                    "line": 60,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123,
+                        126
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "T[]",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "field",
+                            "type": "",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "optional": true,
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "normalizeData",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "T | T[]",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "T[]",
+                    "typeParameters": [
+                        "T"
+                    ],
+                    "line": 46,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123,
+                        126
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "T | T[]",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "indexSignatures": [],
+            "extends": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
         {
             "name": "Utils",
             "id": "class-Utils-6bf4b3d20543a12a4db0e76530bd9cf294a0d7f080e54c6ead7e6eca74eb7eb15e251019ce0c6a8e0c989b97ac2f9314884f4e7e04185382c4a172133e21d7dd",
@@ -628,7 +1133,7 @@
         },
         {
             "name": "AgGridToolbarComponent",
-            "id": "component-AgGridToolbarComponent-49531b9727e4884bdc2f00fc22d4b4396c647d73addd0a7bfed28bf01c1f809e64e363174c7d318585f97c03dc4db4f9a5913103371c0fb9a3974a20c13a0a74",
+            "id": "component-AgGridToolbarComponent-b6084eeef69f7bf15ea3f5e4d4822e4afd94d5a75d124a3dec3ef4b0adddc485fdf386f9ab396f62bdcb36af4c55843674e4f21bec90e43d7246e6634464fa97",
             "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-toolbar/components/ag-grid-toolbar/ag-grid-toolbar.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -653,7 +1158,7 @@
                     "type": "",
                     "optional": false,
                     "description": "<p>Debounce in ms for search input</p>\n",
-                    "line": 164,
+                    "line": 163,
                     "rawdescription": "\nDebounce in ms for search input",
                     "modifierKind": [
                         148
@@ -668,7 +1173,7 @@
                     "type": "",
                     "optional": false,
                     "description": "<p>Disable search field</p>\n",
-                    "line": 166,
+                    "line": 165,
                     "rawdescription": "\nDisable search field",
                     "modifierKind": [
                         148
@@ -683,7 +1188,7 @@
                     "type": "",
                     "optional": false,
                     "description": "<p>Enable search field</p>\n",
-                    "line": 168,
+                    "line": 167,
                     "rawdescription": "\nEnable search field",
                     "modifierKind": [
                         148
@@ -701,7 +1206,7 @@
                     "type": "",
                     "optional": false,
                     "description": "<p>Toolbar actions</p>\n",
-                    "line": 158,
+                    "line": 157,
                     "rawdescription": "\nToolbar actions",
                     "modifierKind": [
                         148
@@ -715,7 +1220,7 @@
                     "type": "",
                     "optional": false,
                     "description": "<p>Ag-grid component ref</p>\n",
-                    "line": 178,
+                    "line": 177,
                     "rawdescription": "\nAg-grid component ref",
                     "modifierKind": [
                         148
@@ -729,7 +1234,7 @@
                     "type": "",
                     "optional": false,
                     "description": "<p>Debounce in ms for search input</p>\n",
-                    "line": 164,
+                    "line": 163,
                     "rawdescription": "\nDebounce in ms for search input",
                     "modifierKind": [
                         148
@@ -744,7 +1249,7 @@
                     "type": "",
                     "optional": false,
                     "description": "<p>Disable search field</p>\n",
-                    "line": 166,
+                    "line": 165,
                     "rawdescription": "\nDisable search field",
                     "modifierKind": [
                         148
@@ -759,7 +1264,7 @@
                     "type": "ElementRef",
                     "optional": false,
                     "description": "",
-                    "line": 180,
+                    "line": 179,
                     "modifierKind": [
                         123,
                         148
@@ -773,7 +1278,7 @@
                     "type": "",
                     "optional": false,
                     "description": "<p>Enable search field</p>\n",
-                    "line": 168,
+                    "line": 167,
                     "rawdescription": "\nEnable search field",
                     "modifierKind": [
                         148
@@ -788,7 +1293,7 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 175,
+                    "line": 174,
                     "modifierKind": [
                         148
                     ]
@@ -801,7 +1306,7 @@
                     "type": "",
                     "optional": false,
                     "description": "<p>Grid ready event</p>\n",
-                    "line": 173,
+                    "line": 172,
                     "rawdescription": "\nGrid ready event",
                     "modifierKind": [
                         148
@@ -815,7 +1320,7 @@
                     "type": "",
                     "optional": false,
                     "description": "<p>Search placeholder text</p>\n",
-                    "line": 170,
+                    "line": 169,
                     "rawdescription": "\nSearch placeholder text",
                     "modifierKind": [
                         148
@@ -829,7 +1334,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 212,
+                    "line": 211,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "modifierKind": [
@@ -842,7 +1347,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 194,
+                    "line": 193,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -852,7 +1357,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 208,
+                    "line": 207,
                     "deprecated": false,
                     "deprecationMessage": ""
                 }
@@ -861,7 +1366,7 @@
             "deprecationMessage": "",
             "hostBindings": [],
             "hostListeners": [],
-            "standalone": true,
+            "standalone": false,
             "imports": [
                 {
                     "name": "AgGridToolbarSearchComponent",
@@ -875,7 +1380,7 @@
             "description": "<p>Adds toolbar to ag-grid, with search and actions.</p>\n<h3>Prerequisites</h3>\n<ul>\n<li><a href=\"https://www.ag-grid.com/angular-data-grid/getting-started/\">Ag Grid Angular</a></li>\n<li>Add icon-font(s) of your choice. Must be included in your html and css.<ul>\n<li>Default: <code>material-icons</code></li>\n</ul>\n</li>\n</ul>\n<b>Example :</b><div><pre class=\"line-numbers\"><code class=\"language-html\">&lt;!-- Google icon-font: https://developers.google.com/fonts/docs/material_icons --&gt;\n&lt;link href=&quot;https://fonts.googleapis.com/icon?family=Material+Icons&quot; rel=&quot;stylesheet&quot; /&gt;</code></pre></div><h2>Features:</h2>\n<ul>\n<li>Quick search</li>\n<li>Toolbar actions<ul>\n<li>Clickable icons</li>\n<li>Add icon-font of your choice.<ul>\n<li>Default: <code>material-icons</code></li>\n<li>Setup: <a href=\"https://developers.google.com/fonts/docs/material_icons#setup_method_1_using_via_google_fonts\">https://developers.google.com/fonts/docs/material_icons#setup_method_1_using_via_google_fonts</a></li>\n</ul>\n</li>\n</ul>\n</li>\n<li>Toolbar content projection with ng-content<ul>\n<li>Content placeholders (selectors)<ul>\n<li><code>toolbarLeft</code> =&gt; Toolbar left</li>\n<li><code>toolbarCenter</code> =&gt; Toolbar center</li>\n<li><code>toolbarRight</code> =&gt; Toolbar right</li>\n<li><code>actionsLeft</code> =&gt; pre actions</li>\n<li><code>actionsRight</code> =&gt; post actions</li>\n</ul>\n</li>\n<li>Single-slot</li>\n</ul>\n</li>\n<li>Adapts to ag-grid themes</li>\n</ul>\n<h2>Component overview</h2>\n<p><strong>Class:</strong> <code>AgGridToolbarComponent</code>, <code>AgGridToolbarActionComponent</code></p>\n<p><strong>Constants:</strong></p>\n<ul>\n<li><code>agGridToolbarActions: AgGridToolbarAction</code> =&gt; Predefined single actions. Fit columns, reset columns, cvs export etc</li>\n</ul>\n<p><strong>Interfaces:</strong></p>\n<ul>\n<li><code>AgGridContext</code> =&gt; Properties this component adds to <code>gridOptions.context</code></li>\n<li><code>AgGridToolbarAction</code> =&gt; Properties for a toolbar action</li>\n</ul>\n<p><strong>Selector:</strong> <code>ag-grid-toolbar</code></p>\n<h3>Toolbar search</h3>\n<h4>Client side</h4>\n<p>Works out of the box for client side grids.</p>\n<h4>Other row models</h4>\n<p>Use <code>context.quickFilterText</code> in custom datasource implementation <code>IServerSideDatasource</code> like below.</p>\n<b>Example :</b><div><pre class=\"line-numbers\"><code class=\"language-ts\">  // server-side example\n  export class ExampleDatasource implements IServerSideDatasource {\n      getRows(params: IServerSideGetRowsParams): void {\n        const { quickFilterText } = params.context as AgGridToolbarContext;\n        // Then use `quickFilterText` in backend call etc..\n      }\n  }</code></pre></div><h3>Code example</h3>\n<b>Example :</b><div><pre class=\"line-numbers\"><code class=\"language-ts\">&#64;Component({\n  standalone: true,\n  selector: &#39;app-demo-grid&#39;,\n  imports: [AgGridModule, AgGridToolbarComponent],\n  template: `\n    &lt;ag-grid-toolbar [actions]=&quot;actions&quot;&gt;\n      &lt;ag-grid-angular [gridOptions]=&quot;gridOptions&quot;&gt;&lt;/ag-grid-angular&gt;\n    &lt;/ag-grid-toolbar&gt;\n  `,\n})\nexport class DemoGridComponent {\n  actions: AgGridToolbarAction[];\n  gridOptions: GridOptions;\n}</code></pre></div>",
             "rawdescription": "\n\nAdds toolbar to ag-grid, with search and actions.\n\n### Prerequisites\n\n- [Ag Grid Angular](https://www.ag-grid.com/angular-data-grid/getting-started/)\n- Add icon-font(s) of your choice. Must be included in your html and css.\n  - Default: `material-icons`\n\n```html\n<!-- Google icon-font: https://developers.google.com/fonts/docs/material_icons -->\n<link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\" />\n```\n\n## Features:\n- Quick search\n- Toolbar actions\n  - Clickable icons\n  - Add icon-font of your choice.\n    - Default: `material-icons`\n    - Setup: https://developers.google.com/fonts/docs/material_icons#setup_method_1_using_via_google_fonts\n- Toolbar content projection with ng-content\n  - Content placeholders (selectors)\n    - `toolbarLeft` => Toolbar left\n    - `toolbarCenter` => Toolbar center\n    - `toolbarRight` => Toolbar right\n    - `actionsLeft` => pre actions\n    - `actionsRight` => post actions\n  - Single-slot\n- Adapts to ag-grid themes\n\n## Component overview\n\n**Class:** `AgGridToolbarComponent`, `AgGridToolbarActionComponent`\n\n**Constants:**\n- `agGridToolbarActions: AgGridToolbarAction` => Predefined single actions. Fit columns, reset columns, cvs export etc\n\n**Interfaces:**\n- `AgGridContext` => Properties this component adds to `gridOptions.context`\n- `AgGridToolbarAction` => Properties for a toolbar action\n\n**Selector:** `ag-grid-toolbar`\n\n### Toolbar search\n\n#### Client side\n\nWorks out of the box for client side grids.\n\n#### Other row models\n\nUse `context.quickFilterText` in custom datasource implementation `IServerSideDatasource` like below.\n\n```ts\n  // server-side example\n  export class ExampleDatasource implements IServerSideDatasource {\n      getRows(params: IServerSideGetRowsParams): void {\n        const { quickFilterText } = params.context as AgGridToolbarContext;\n        // Then use `quickFilterText` in backend call etc..\n      }\n  }\n```\n\n### Code example\n\n```ts\n@Component({\n  standalone: true,\n  selector: 'app-demo-grid',\n  imports: [AgGridModule, AgGridToolbarComponent],\n  template: `\n    <ag-grid-toolbar [actions]=\"actions\">\n      <ag-grid-angular [gridOptions]=\"gridOptions\"></ag-grid-angular>\n    </ag-grid-toolbar>\n  `,\n})\nexport class DemoGridComponent {\n  actions: AgGridToolbarAction[];\n  gridOptions: GridOptions;\n}\n```\n",
             "type": "component",
-            "sourceCode": "import {\n  Component,\n  contentChild,\n  ElementRef,\n  inject,\n  input,\n  output,\n  signal,\n} from '@angular/core';\nimport { AgGridAngular } from 'ag-grid-angular';\nimport { AgGridEvent } from 'ag-grid-community';\nimport { firstValueFrom } from 'rxjs';\nimport { agGridToolbarAction } from '../../constants/ag-grid-toolbar-actions';\nimport { AgGridContext } from '../../interfaces/ag-grid-context';\nimport { AgGridToolbarAction } from '../../interfaces/ag-grid-toolbar-action';\nimport { AgGridToolbarActionComponent } from '../ag-grid-toolbar-action/ag-grid-toolbar-action.component';\nimport { AgGridToolbarSearchComponent } from '../ag-grid-toolbar-search/ag-grid-toolbar-search.component';\n\n/**\n * Adds toolbar to ag-grid, with search and actions.\n *\n * ### Prerequisites\n *\n * - [Ag Grid Angular](https://www.ag-grid.com/angular-data-grid/getting-started/)\n * - Add icon-font(s) of your choice. Must be included in your html and css.\n *   - Default: `material-icons`\n *\n * ```html\n * <!-- Google icon-font: https://developers.google.com/fonts/docs/material_icons -->\n * <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\" />\n * ```\n *\n * ## Features:\n * - Quick search\n * - Toolbar actions\n *   - Clickable icons\n *   - Add icon-font of your choice.\n *     - Default: `material-icons`\n *     - Setup: https://developers.google.com/fonts/docs/material_icons#setup_method_1_using_via_google_fonts\n * - Toolbar content projection with ng-content\n *   - Content placeholders (selectors)\n *     - `toolbarLeft` => Toolbar left\n *     - `toolbarCenter` => Toolbar center\n *     - `toolbarRight` => Toolbar right\n *     - `actionsLeft` => pre actions\n *     - `actionsRight` => post actions\n *   - Single-slot\n * - Adapts to ag-grid themes\n *\n * ## Component overview\n *\n * **Class:** `AgGridToolbarComponent`, `AgGridToolbarActionComponent`\n *\n * **Constants:**\n * - `agGridToolbarActions: AgGridToolbarAction` => Predefined single actions. Fit columns, reset columns, cvs export etc\n *\n * **Interfaces:**\n * - `AgGridContext` => Properties this component adds to `gridOptions.context`\n * - `AgGridToolbarAction` => Properties for a toolbar action\n *\n * **Selector:** `ag-grid-toolbar`\n *\n * ### Toolbar search\n *\n * #### Client side\n *\n * Works out of the box for client side grids.\n *\n * #### Other row models\n *\n * Use `context.quickFilterText` in custom datasource implementation `IServerSideDatasource` like below.\n *\n * ```ts\n *   // server-side example\n *   export class ExampleDatasource implements IServerSideDatasource {\n *       getRows(params: IServerSideGetRowsParams): void {\n *         const { quickFilterText } = params.context as AgGridToolbarContext;\n *         // Then use `quickFilterText` in backend call etc..\n *       }\n *   }\n * ```\n *\n * ### Code example\n *\n * ```ts\n * @Component({\n *   standalone: true,\n *   selector: 'app-demo-grid',\n *   imports: [AgGridModule, AgGridToolbarComponent],\n *   template: `\n *     <ag-grid-toolbar [actions]=\"actions\">\n *       <ag-grid-angular [gridOptions]=\"gridOptions\"></ag-grid-angular>\n *     </ag-grid-toolbar>\n *   `,\n * })\n * export class DemoGridComponent {\n *   actions: AgGridToolbarAction[];\n *   gridOptions: GridOptions;\n * }\n * ```\n */\n@Component({\n  imports: [AgGridToolbarSearchComponent, AgGridToolbarActionComponent],\n  selector: 'ag-grid-toolbar',\n  standalone: true,\n  styleUrls: ['./ag-grid-toolbar.component.css'],\n  template: `\n    <div class=\"ag-grid-toolbar\">\n      <div class=\"ag-grid-toolbar-content\">\n        <div class=\"ag-grid-toolbar-content-left\">\n          @if (enableSearch()) {\n            <ag-grid-toolbar-search\n              [agGrid]=\"agGrid()\"\n              [debounceTime]=\"debounceSearch()\"\n              [disabled]=\"disableSearch()\"\n              [placeholder]=\"placeholderSearch()\"\n            ></ag-grid-toolbar-search>\n          }\n          <ng-content select=\"[toolbarLeft]\"></ng-content>\n        </div>\n        <div class=\"ag-grid-toolbar-content-center\">\n          <ng-content select=\"[toolbarCenter]\"></ng-content>\n        </div>\n        <div class=\"ag-grid-toolbar-content-right\">\n          <ng-content select=\"[toolbarRight]\"></ng-content>\n          <ng-content select=\"[actionsLeft]\"></ng-content>\n          @for (action of actions(); track $index) {\n            @if (!action?.icon) {\n              <span class=\"toolbar-action-separator\"></span>\n            }\n            @if (action?.icon) {\n              <!-- <div [title]=\"action.disabled ? action.tooltipDisabled || '' : ''\"> -->\n              <ag-grid-toolbar-action\n                [color]=\"action?.color\"\n                [disabled]=\"action?.disabled || false\"\n                [icon]=\"action.icon\"\n                [id]=\"action.id\"\n                [tooltip]=\"action.tooltip || ''\"\n                (click)=\"action?.clickFn?.({ action, event })\"\n              ></ag-grid-toolbar-action>\n              <!-- </div> -->\n            }\n          }\n          <ng-content select=\"[actionsRight]\"></ng-content>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"ag-grid-content\">\n      <ng-content>\n        <!-- ag-grid-angular -->\n      </ng-content>\n    </div>\n  `,\n})\nexport class AgGridToolbarComponent<TData = any, TContext = any> {\n  /** Toolbar actions */\n  readonly actions = input<AgGridToolbarAction[]>([\n    agGridToolbarAction.fit,\n    agGridToolbarAction.reset,\n    agGridToolbarAction.csv,\n  ]);\n  /** Debounce in ms for search input */\n  readonly debounceSearch = input(500);\n  /** Disable search field*/\n  readonly disableSearch = input(false);\n  /** Enable search field*/\n  readonly enableSearch = input(true);\n  /** Search placeholder text */\n  readonly placeholderSearch = input('Search...');\n\n  /** Grid ready event */\n  readonly gridReady = output<AgGridEvent<TData, TContext>>();\n\n  readonly gridIsReady = signal(false);\n\n  /** Ag-grid component ref */\n  readonly agGrid = contentChild.required(AgGridAngular);\n\n  private readonly elRef: ElementRef = inject(ElementRef);\n\n  get context(): TContext & AgGridContext {\n    return this.agGrid().context || this.agGrid().gridOptions?.context;\n  }\n\n  get event(): AgGridEvent<TData, TContext> {\n    // this.agGrid().api.g\n    return {\n      api: this.agGrid().api,\n      context: this.context,\n    } as AgGridEvent<TData, TContext>;\n  }\n\n  ngAfterContentInit(): void {\n    firstValueFrom(this.agGrid().gridReady).then((event) => {\n      this.gridIsReady.set(true);\n      if (event.context) {\n        event.context.actions = this.actions();\n      } else {\n        const warning =\n          'Missing `context` or `gridOptions.context`, some functionality will not work.';\n        console.warn(warning);\n      }\n      this.gridReady.emit(event);\n    });\n  }\n\n  ngAfterViewInit(): void {\n    this.getAgStyles();\n  }\n\n  private getAgStyles() {\n    const element = this.elRef.nativeElement;\n    const variableNames = [\n      '--ag-header-background-color',\n      '--ag-wrapper-border',\n      '--ag-border-color',\n      '--ag-wrapper-border-radius',\n      '--ag-input-disabled-background-color',\n      '--ag-range-selection-border-color',\n    ];\n    const agEl = element.querySelector('ag-grid-angular')!;\n    const styleEl = agEl.getElementsByTagName('style')[0];\n\n    const computedStyles = window.getComputedStyle(styleEl);\n\n    variableNames.forEach((varName) => {\n      const value = computedStyles.getPropertyValue(varName);\n      if (value) {\n        document.documentElement.style.setProperty(varName, value.trim());\n      }\n    });\n  }\n}\n",
+            "sourceCode": "import {\n  Component,\n  contentChild,\n  ElementRef,\n  inject,\n  input,\n  output,\n  signal,\n} from '@angular/core';\nimport { AgGridAngular } from 'ag-grid-angular';\nimport { AgGridEvent } from 'ag-grid-community';\nimport { firstValueFrom } from 'rxjs';\nimport { agGridToolbarAction } from '../../constants/ag-grid-toolbar-actions';\nimport { AgGridContext } from '../../interfaces/ag-grid-context';\nimport { AgGridToolbarAction } from '../../interfaces/ag-grid-toolbar-action';\nimport { AgGridToolbarActionComponent } from '../ag-grid-toolbar-action/ag-grid-toolbar-action.component';\nimport { AgGridToolbarSearchComponent } from '../ag-grid-toolbar-search/ag-grid-toolbar-search.component';\n\n/**\n * Adds toolbar to ag-grid, with search and actions.\n *\n * ### Prerequisites\n *\n * - [Ag Grid Angular](https://www.ag-grid.com/angular-data-grid/getting-started/)\n * - Add icon-font(s) of your choice. Must be included in your html and css.\n *   - Default: `material-icons`\n *\n * ```html\n * <!-- Google icon-font: https://developers.google.com/fonts/docs/material_icons -->\n * <link href=\"https://fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\" />\n * ```\n *\n * ## Features:\n * - Quick search\n * - Toolbar actions\n *   - Clickable icons\n *   - Add icon-font of your choice.\n *     - Default: `material-icons`\n *     - Setup: https://developers.google.com/fonts/docs/material_icons#setup_method_1_using_via_google_fonts\n * - Toolbar content projection with ng-content\n *   - Content placeholders (selectors)\n *     - `toolbarLeft` => Toolbar left\n *     - `toolbarCenter` => Toolbar center\n *     - `toolbarRight` => Toolbar right\n *     - `actionsLeft` => pre actions\n *     - `actionsRight` => post actions\n *   - Single-slot\n * - Adapts to ag-grid themes\n *\n * ## Component overview\n *\n * **Class:** `AgGridToolbarComponent`, `AgGridToolbarActionComponent`\n *\n * **Constants:**\n * - `agGridToolbarActions: AgGridToolbarAction` => Predefined single actions. Fit columns, reset columns, cvs export etc\n *\n * **Interfaces:**\n * - `AgGridContext` => Properties this component adds to `gridOptions.context`\n * - `AgGridToolbarAction` => Properties for a toolbar action\n *\n * **Selector:** `ag-grid-toolbar`\n *\n * ### Toolbar search\n *\n * #### Client side\n *\n * Works out of the box for client side grids.\n *\n * #### Other row models\n *\n * Use `context.quickFilterText` in custom datasource implementation `IServerSideDatasource` like below.\n *\n * ```ts\n *   // server-side example\n *   export class ExampleDatasource implements IServerSideDatasource {\n *       getRows(params: IServerSideGetRowsParams): void {\n *         const { quickFilterText } = params.context as AgGridToolbarContext;\n *         // Then use `quickFilterText` in backend call etc..\n *       }\n *   }\n * ```\n *\n * ### Code example\n *\n * ```ts\n * @Component({\n *   standalone: true,\n *   selector: 'app-demo-grid',\n *   imports: [AgGridModule, AgGridToolbarComponent],\n *   template: `\n *     <ag-grid-toolbar [actions]=\"actions\">\n *       <ag-grid-angular [gridOptions]=\"gridOptions\"></ag-grid-angular>\n *     </ag-grid-toolbar>\n *   `,\n * })\n * export class DemoGridComponent {\n *   actions: AgGridToolbarAction[];\n *   gridOptions: GridOptions;\n * }\n * ```\n */\n@Component({\n    imports: [AgGridToolbarSearchComponent, AgGridToolbarActionComponent],\n    selector: 'ag-grid-toolbar',\n    styleUrls: ['./ag-grid-toolbar.component.css'],\n    template: `\n    <div class=\"ag-grid-toolbar\">\n      <div class=\"ag-grid-toolbar-content\">\n        <div class=\"ag-grid-toolbar-content-left\">\n          @if (enableSearch()) {\n            <ag-grid-toolbar-search\n              [agGrid]=\"agGrid()\"\n              [debounceTime]=\"debounceSearch()\"\n              [disabled]=\"disableSearch()\"\n              [placeholder]=\"placeholderSearch()\"\n            ></ag-grid-toolbar-search>\n          }\n          <ng-content select=\"[toolbarLeft]\"></ng-content>\n        </div>\n        <div class=\"ag-grid-toolbar-content-center\">\n          <ng-content select=\"[toolbarCenter]\"></ng-content>\n        </div>\n        <div class=\"ag-grid-toolbar-content-right\">\n          <ng-content select=\"[toolbarRight]\"></ng-content>\n          <ng-content select=\"[actionsLeft]\"></ng-content>\n          @for (action of actions(); track $index) {\n            @if (!action?.icon) {\n              <span class=\"toolbar-action-separator\"></span>\n            }\n            @if (action?.icon) {\n              <!-- <div [title]=\"action.disabled ? action.tooltipDisabled || '' : ''\"> -->\n              <ag-grid-toolbar-action\n                [color]=\"action?.color\"\n                [disabled]=\"action?.disabled || false\"\n                [icon]=\"action.icon\"\n                [id]=\"action.id\"\n                [tooltip]=\"action.tooltip || ''\"\n                (click)=\"action?.clickFn?.({ action, event })\"\n              ></ag-grid-toolbar-action>\n              <!-- </div> -->\n            }\n          }\n          <ng-content select=\"[actionsRight]\"></ng-content>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"ag-grid-content\">\n      <ng-content>\n        <!-- ag-grid-angular -->\n      </ng-content>\n    </div>\n  `\n})\nexport class AgGridToolbarComponent<TData = any, TContext = any> {\n  /** Toolbar actions */\n  readonly actions = input<AgGridToolbarAction[]>([\n    agGridToolbarAction.fit,\n    agGridToolbarAction.reset,\n    agGridToolbarAction.csv,\n  ]);\n  /** Debounce in ms for search input */\n  readonly debounceSearch = input(500);\n  /** Disable search field*/\n  readonly disableSearch = input(false);\n  /** Enable search field*/\n  readonly enableSearch = input(true);\n  /** Search placeholder text */\n  readonly placeholderSearch = input('Search...');\n\n  /** Grid ready event */\n  readonly gridReady = output<AgGridEvent<TData, TContext>>();\n\n  readonly gridIsReady = signal(false);\n\n  /** Ag-grid component ref */\n  readonly agGrid = contentChild.required(AgGridAngular);\n\n  private readonly elRef: ElementRef = inject(ElementRef);\n\n  get context(): TContext & AgGridContext {\n    return this.agGrid().context || this.agGrid().gridOptions?.context;\n  }\n\n  get event(): AgGridEvent<TData, TContext> {\n    // this.agGrid().api.g\n    return {\n      api: this.agGrid().api,\n      context: this.context,\n    } as AgGridEvent<TData, TContext>;\n  }\n\n  ngAfterContentInit(): void {\n    firstValueFrom(this.agGrid().gridReady).then((event) => {\n      this.gridIsReady.set(true);\n      if (event.context) {\n        event.context.actions = this.actions();\n      } else {\n        const warning =\n          'Missing `context` or `gridOptions.context`, some functionality will not work.';\n        console.warn(warning);\n      }\n      this.gridReady.emit(event);\n    });\n  }\n\n  ngAfterViewInit(): void {\n    this.getAgStyles();\n  }\n\n  private getAgStyles() {\n    const element = this.elRef.nativeElement;\n    const variableNames = [\n      '--ag-header-background-color',\n      '--ag-wrapper-border',\n      '--ag-border-color',\n      '--ag-wrapper-border-radius',\n      '--ag-input-disabled-background-color',\n      '--ag-range-selection-border-color',\n    ];\n    const agEl = element.querySelector('ag-grid-angular')!;\n    const styleEl = agEl.getElementsByTagName('style')[0];\n\n    const computedStyles = window.getComputedStyle(styleEl);\n\n    variableNames.forEach((varName) => {\n      const value = computedStyles.getPropertyValue(varName);\n      if (value) {\n        document.documentElement.style.setProperty(varName, value.trim());\n      }\n    });\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -892,7 +1397,7 @@
                         "name": "context",
                         "type": "",
                         "returnType": "",
-                        "line": 182
+                        "line": 181
                     }
                 },
                 "event": {
@@ -901,7 +1406,7 @@
                         "name": "event",
                         "type": "",
                         "returnType": "AgGridEvent<TData, TContext>",
-                        "line": 186
+                        "line": 185
                     }
                 }
             }
@@ -1110,6 +1615,1180 @@
                     }
                 }
             }
+        },
+        {
+            "name": "DropdownComponent",
+            "id": "component-DropdownComponent-c37b586bf2286a0b51dc68999231364919f16afd83827cec9ccc93071ea29eb7e58318f19223b1139b898e69ed2ae41a12cbc3bd83e241b8169a6e563d10896f",
+            "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/dropdown/dropdown.component.ts",
+            "changeDetection": "ChangeDetectionStrategy.OnPush",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "ag-dropdown",
+            "styleUrls": [],
+            "styles": [],
+            "template": "<input\n  #inputRef\n  type=\"text\"\n  [disabled]=\"disabled()\"\n  [placeholder]=\"placeholder()\"\n  [value]=\"displayText()\"\n  (focus)=\"openDropdown()\"\n  (keydown)=\"onKeyDown($event)\"\n  (input)=\"onInput($any($event.target).value)\"\n  (click)=\"openDropdown()\"\n/>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "columnHeaderVisible",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 47,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "disabled",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 48,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "gridOptions",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 50,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "listSize",
+                    "defaultValue": "7",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 51,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "theme",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 54,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "columnHeaderVisible",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 47,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "disabled",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 48,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "displayFields",
+                    "defaultValue": "input<string[]>([])",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 49,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "displayText",
+                    "defaultValue": "linkedSignal(() =>\n    DropdownUtils.getDisplayText(this.selectedData() as any, this.displayFields())\n  )",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 61
+                },
+                {
+                    "name": "dropdownInput",
+                    "defaultValue": "viewChild.required<ElementRef<HTMLInputElement>>('inputRef')",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 65,
+                    "modifierKind": [
+                        124
+                    ]
+                },
+                {
+                    "name": "gridApi",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "GridApi",
+                    "optional": true,
+                    "description": "<p>Grid api from ag-grid inside dropdown panel</p>\n",
+                    "line": 69,
+                    "rawdescription": "\nGrid api from ag-grid inside dropdown panel"
+                },
+                {
+                    "name": "gridOptions",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 50,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "initPanelComponent",
+                    "defaultValue": "() => {...}",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 145,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "listSize",
+                    "defaultValue": "7",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 51,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "onCellKeyDown",
+                    "defaultValue": "() => {...}",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 158,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "onGridReady",
+                    "defaultValue": "() => {...}",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 172,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "onInput",
+                    "defaultValue": "() => {...}",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 98,
+                    "modifierKind": [
+                        124
+                    ]
+                },
+                {
+                    "name": "onSelectionChanged",
+                    "defaultValue": "() => {...}",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 183,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "overlay",
+                    "defaultValue": "inject(Overlay)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 72,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "overlayRef",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "OverlayRef",
+                    "optional": true,
+                    "description": "",
+                    "line": 70
+                },
+                {
+                    "name": "placeholder",
+                    "defaultValue": "input('Search...')",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 52,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "selected",
+                    "defaultValue": "input<TData | TData[]>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 53,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "selectedData",
+                    "defaultValue": "linkedSignal(() => this.selected())",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 66,
+                    "modifierKind": [
+                        124
+                    ]
+                },
+                {
+                    "name": "selectionChange",
+                    "defaultValue": "output<DropdownSelectionChangeEvent<TData>>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 58
+                },
+                {
+                    "name": "theme",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 54,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "valueField",
+                    "defaultValue": "input<string>('')",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 55,
+                    "modifierKind": [
+                        148
+                    ]
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "closeDropdown",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 94,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "createOverlay",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 117,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "getGridOptions",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "GridOptions",
+                    "typeParameters": [],
+                    "line": 203,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "handleClickOutside",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "MouseEvent",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 79,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "decorators": [
+                        {
+                            "name": "HostListener",
+                            "stringifiedArguments": "'document:click', ['$event']"
+                        }
+                    ],
+                    "modifierKind": [
+                        170
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "event",
+                            "type": "MouseEvent",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "onKeyDown",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "KeyboardEvent",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 103,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        124
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "event",
+                            "type": "KeyboardEvent",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "openDropdown",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 90,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [
+                {
+                    "name": "document:click",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "MouseEvent",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "argsDecorator": [
+                        "$event"
+                    ],
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 79
+                }
+            ],
+            "standalone": false,
+            "imports": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Overlay, OverlayRef } from '@angular/cdk/overlay';\nimport { ComponentPortal } from '@angular/cdk/portal';\nimport {\n  ChangeDetectionStrategy,\n  Component,\n  ComponentRef,\n  ElementRef,\n  HostListener,\n  inject,\n  input,\n  linkedSignal,\n  output,\n  viewChild,\n} from '@angular/core';\nimport {\n  CellKeyDownEvent,\n  GridApi,\n  GridOptions,\n  GridReadyEvent,\n  SelectionChangedEvent,\n  Theme,\n} from 'ag-grid-community';\nimport { DropdownSelectionChangeEvent } from '../../interfaces/dropdown-selection-change-event';\nimport { DropdownUtils } from '../../utils';\nimport { DropdownPanelComponent } from '../dropdown-panel/dropdown-panel.component';\n\n@Component({\n  selector: 'ag-dropdown',\n  imports: [],\n  template: `\n    <input\n      #inputRef\n      type=\"text\"\n      [disabled]=\"disabled()\"\n      [placeholder]=\"placeholder()\"\n      [value]=\"displayText()\"\n      (focus)=\"openDropdown()\"\n      (keydown)=\"onKeyDown($event)\"\n      (input)=\"onInput($any($event.target).value)\"\n      (click)=\"openDropdown()\"\n    />\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class DropdownComponent<TData = any> {\n  // Inputs\n  readonly columnHeaderVisible = input(false);\n  readonly disabled = input(false);\n  readonly displayFields = input<string[]>([]);\n  readonly gridOptions = input<GridOptions>();\n  readonly listSize = input(7);\n  readonly placeholder = input('Search...');\n  readonly selected = input<TData | TData[]>();\n  readonly theme = input<Theme>();\n  readonly valueField = input<string>('');\n\n  // Outputs\n  selectionChange = output<DropdownSelectionChangeEvent<TData>>();\n\n  // Signals\n  displayText = linkedSignal(() =>\n    DropdownUtils.getDisplayText(this.selectedData() as any, this.displayFields())\n  );\n\n  protected dropdownInput = viewChild.required<ElementRef<HTMLInputElement>>('inputRef');\n  protected selectedData = linkedSignal(() => this.selected());\n\n  /** Grid api from ag-grid inside dropdown panel */\n  gridApi?: GridApi;\n  overlayRef?: OverlayRef;\n\n  private overlay = inject(Overlay);\n\n  get isPanelOpen() {\n    return this.overlayRef?.hasAttached();\n  }\n\n  @HostListener('document:click', ['$event'])\n  handleClickOutside(event: MouseEvent) {\n    if (!this.isPanelOpen) return;\n    const inputEl = this.dropdownInput().nativeElement;\n    const overlayEl = this.overlayRef?.overlayElement;\n    const target = event.target as HTMLElement;\n\n    if (!inputEl.contains(target) && !overlayEl?.contains(target)) {\n      this.closeDropdown();\n    }\n  }\n\n  openDropdown() {\n    if (!this.isPanelOpen) this.createOverlay();\n  }\n\n  closeDropdown() {\n    if (this.isPanelOpen) this.overlayRef?.dispose();\n  }\n\n  protected onInput = (value: string) => {\n    this.gridApi?.setGridOption('quickFilterText', value);\n  };\n\n  // Add keydown handler\n  protected onKeyDown(event: KeyboardEvent) {\n    switch (event.key) {\n      case 'ArrowDown':\n      case 'Enter':\n        if (this.isPanelOpen) DropdownUtils.focusGridCell(this.gridApi);\n        else this.openDropdown();\n        event.preventDefault();\n        break;\n      case 'Escape':\n        this.closeDropdown();\n        break;\n    }\n  }\n\n  private createOverlay() {\n    const inputEl = this.dropdownInput().nativeElement;\n    const positionStrategy = this.overlay\n      .position()\n      .flexibleConnectedTo(this.dropdownInput())\n      .withPositions([\n        {\n          originX: 'start',\n          originY: 'bottom',\n          overlayX: 'start',\n          overlayY: 'top',\n        },\n      ]);\n\n    this.overlayRef = this.overlay.create({\n      positionStrategy,\n      hasBackdrop: false,\n      backdropClass: 'cdk-overlay-transparent-backdrop',\n      height: inputEl.offsetHeight * 1.5 + inputEl.offsetHeight * this.listSize(),\n      width: inputEl.offsetWidth,\n    });\n\n    const panelPortal = new ComponentPortal(DropdownPanelComponent);\n    const panelComponentRef = this.overlayRef.attach(panelPortal);\n\n    this.initPanelComponent(panelComponentRef);\n  }\n\n  private initPanelComponent = (componentRef: ComponentRef<DropdownPanelComponent>) => {\n    const gridOptions = this.getGridOptions();\n    // Set inputs\n    componentRef.setInput('columnHeaderVisible', this.columnHeaderVisible());\n    componentRef.setInput('gridOptions', gridOptions);\n    componentRef.setInput('theme', this.theme());\n\n    const component = componentRef.instance;\n    component.cellKeyDown.subscribe(this.onCellKeyDown);\n    component.gridReady.subscribe(this.onGridReady);\n    component.selectionChanged.subscribe(this.onSelectionChanged);\n  };\n\n  private onCellKeyDown = (event: CellKeyDownEvent) => {\n    const keyEvent = event.event as KeyboardEvent;\n    const { key } = keyEvent;\n    switch (key) {\n      case 'Enter':\n        event.node.setSelected(true);\n        break;\n      case 'Escape':\n        this.dropdownInput().nativeElement.focus();\n        this.closeDropdown();\n        break;\n    }\n  };\n\n  private onGridReady = ({ api }: GridReadyEvent) => {\n    this.gridApi = api;\n    api.sizeColumnsToFit();\n    const selectedData = this.selectedData();\n    if (selectedData) {\n      const rowData = Array.isArray(selectedData) ? selectedData : [selectedData];\n      api.ensureNodeVisible(rowData[0], 'middle');\n    }\n    DropdownUtils.focusGridCell(api);\n  };\n\n  private onSelectionChanged = ({ api, source }: SelectionChangedEvent) => {\n    const rows = api.getSelectedRows();\n    const displayText = DropdownUtils.getDisplayText(rows, this.displayFields());\n    this.displayText.set(displayText);\n    if (source === 'gridInitializing') return;\n    const type = DropdownUtils.getSelectionType(api);\n\n    const selected = type === 'single' ? rows[0] : rows;\n    const value = type === 'single' ? DropdownUtils.getValue(rows[0], this.valueField()) : null;\n    this.selectionChange.emit({ selected, value });\n    this.selectedData.set(selected);\n\n    switch (type) {\n      case 'single':\n        this.dropdownInput().nativeElement.focus();\n        this.closeDropdown();\n        break;\n    }\n  };\n\n  private getGridOptions(): GridOptions {\n    const inputEl = this.dropdownInput().nativeElement;\n    const gridOptions = this.gridOptions() || {};\n    if (!gridOptions.rowHeight) {\n      gridOptions.rowHeight = inputEl.offsetHeight;\n    }\n    if (!gridOptions.headerHeight) {\n      gridOptions.headerHeight = inputEl.offsetHeight * 1.5 - 3;\n    }\n    if (!gridOptions.getRowId && this.valueField()) {\n      gridOptions.getRowId = (params) => {\n        return String(params.data[this.valueField()]);\n      };\n    }\n    const rowSelection = DropdownUtils.getRowIds(this.selectedData(), this.valueField());\n    gridOptions.initialState = { rowSelection };\n    return gridOptions;\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "extends": [],
+            "accessors": {
+                "isPanelOpen": {
+                    "name": "isPanelOpen",
+                    "getSignature": {
+                        "name": "isPanelOpen",
+                        "type": "",
+                        "returnType": "",
+                        "line": 74
+                    }
+                }
+            }
+        },
+        {
+            "name": "DropdownFormControlComponent",
+            "id": "component-DropdownFormControlComponent-5da75643d1fc82186653ee68c79e34b45078c3bed124d88ae5af50dfd628026895e218b8c30f617b70a68b277157ad5811714e7dc0c7730bb239e6a3c73d5071",
+            "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.component.ts",
+            "changeDetection": "ChangeDetectionStrategy.OnPush",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [
+                {
+                    "name": "{\n    provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DropdownFormControlComponent), multi: true,\n}",
+                    "type": "component"
+                }
+            ],
+            "selector": "ag-dropdown-form-control",
+            "styleUrls": [],
+            "styles": [],
+            "template": "<ag-dropdown\n  [columnHeaderVisible]=\"columnHeaderVisible()\"\n  [disabled]=\"formControl()?.disabled ?? false\"\n  [displayFields]=\"displayFields()\"\n  [gridOptions]=\"gridOptions()\"\n  [listSize]=\"listSize()\"\n  [theme]=\"theme()\"\n  [valueField]=\"valueField()\"\n  [selected]=\"selectedData() || formControl()?.value\"\n  (selectionChange)=\"onSelectionChange($event)\"\n></ag-dropdown>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "columnHeaderVisible",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 45,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "formControl",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 47,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "listSize",
+                    "defaultValue": "7",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 49,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "selected",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 50,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "theme",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 51,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "columnHeaderVisible",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 45,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "displayFields",
+                    "defaultValue": "input<string[]>([])",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 46,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "formControl",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 47,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "gridOptions",
+                    "defaultValue": "input<GridOptions>({})",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 48,
+                    "modifierKind": [
+                        148
+                    ]
+                },
+                {
+                    "name": "listSize",
+                    "defaultValue": "7",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 49,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "onChange",
+                    "defaultValue": "() => {...}",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "function",
+                    "optional": false,
+                    "description": "",
+                    "line": 55,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "onTouched",
+                    "defaultValue": "() => {...}",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "function",
+                    "optional": false,
+                    "description": "",
+                    "line": 56,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "selected",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 50,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "selectedData",
+                    "defaultValue": "linkedSignal(() => this.selected())",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 53,
+                    "modifierKind": [
+                        124
+                    ]
+                },
+                {
+                    "name": "theme",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 51,
+                    "modifierKind": [
+                        148
+                    ],
+                    "required": false
+                },
+                {
+                    "name": "valueField",
+                    "defaultValue": "input('id')",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 52,
+                    "modifierKind": [
+                        148
+                    ]
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "onSelectionChange",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "DropdownSelectionChangeEvent<any>",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 91,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "event",
+                            "type": "DropdownSelectionChangeEvent<any>",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnChange",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [
+                                {
+                                    "name": "value",
+                                    "type": "any",
+                                    "deprecated": false,
+                                    "deprecationMessage": ""
+                                }
+                            ]
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 76,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [
+                                {
+                                    "name": "value",
+                                    "type": "any",
+                                    "deprecated": false,
+                                    "deprecationMessage": ""
+                                }
+                            ],
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnTouched",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": []
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 81,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": "function",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "function": [],
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "setDisabledState",
+                    "args": [
+                        {
+                            "name": "isDisabled",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 86,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "isDisabled",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "writeValue",
+                    "args": [
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 69,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "DropdownComponent",
+                    "type": "component"
+                },
+                {
+                    "name": "ReactiveFormsModule",
+                    "type": "module"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import {\n  ChangeDetectionStrategy,\n  Component,\n  effect,\n  forwardRef,\n  input,\n  linkedSignal,\n} from '@angular/core';\nimport {\n  ControlValueAccessor,\n  NG_VALUE_ACCESSOR,\n  FormControl,\n  ReactiveFormsModule,\n} from '@angular/forms';\nimport { GridOptions, Theme } from 'ag-grid-community';\nimport { DropdownSelectionChangeEvent } from '../../interfaces/dropdown-selection-change-event';\nimport { DropdownComponent } from '../dropdown/dropdown.component';\n\n@Component({\n  selector: 'ag-dropdown-form-control',\n  imports: [DropdownComponent, ReactiveFormsModule],\n  template: `\n    <ag-dropdown\n      [columnHeaderVisible]=\"columnHeaderVisible()\"\n      [disabled]=\"formControl()?.disabled ?? false\"\n      [displayFields]=\"displayFields()\"\n      [gridOptions]=\"gridOptions()\"\n      [listSize]=\"listSize()\"\n      [theme]=\"theme()\"\n      [valueField]=\"valueField()\"\n      [selected]=\"selectedData() || formControl()?.value\"\n      (selectionChange)=\"onSelectionChange($event)\"\n    ></ag-dropdown>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => DropdownFormControlComponent),\n      multi: true,\n    },\n  ],\n})\nexport class DropdownFormControlComponent implements ControlValueAccessor {\n  readonly columnHeaderVisible = input(false);\n  readonly displayFields = input<string[]>([]);\n  readonly formControl = input<FormControl>();\n  readonly gridOptions = input<GridOptions>({});\n  readonly listSize = input(7);\n  readonly selected = input<any>();\n  readonly theme = input<Theme>();\n  readonly valueField = input('id');\n  protected selectedData = linkedSignal(() => this.selected());\n\n  private onChange: (value: any) => void = () => {};\n  private onTouched: () => void = () => {};\n\n  constructor() {\n    effect(() => {\n      const data = this.selectedData();\n      if (data && !this.formControl()?.value) {\n        const value = this.valueField() ? data[this.valueField()] : data;\n        this.formControl()?.setValue(value, { emitEvent: false });\n      }\n    });\n  }\n\n  // Writes value from the form control to the component\n  writeValue(value: any): void {\n    // Since we're using FormControl directly via input,\n    // we don't need to manage internal state here\n    // The template binding will handle the display\n  }\n\n  // Registers callback for when value changes\n  registerOnChange(fn: (value: any) => void): void {\n    this.onChange = fn;\n  }\n\n  // Registers callback for when control is touched\n  registerOnTouched(fn: () => void): void {\n    this.onTouched = fn;\n  }\n\n  // Handles disabled state\n  setDisabledState(isDisabled: boolean): void {\n    // If you need to propagate this to the FormControl\n    isDisabled ? this.formControl()?.disable() : this.formControl()?.enable();\n  }\n\n  onSelectionChange(event: DropdownSelectionChangeEvent<any>): void {\n    const newValue = event.value;\n    this.selectedData.set(event.selected);\n    this.formControl()?.setValue(event.value);\n    this.onChange(newValue); // Notify form of change\n    this.onTouched(); // Mark as touched\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 56
+            },
+            "extends": [],
+            "implements": [
+                "ControlValueAccessor"
+            ]
+        },
+        {
+            "name": "DropdownPanelComponent",
+            "id": "component-DropdownPanelComponent-d7576e60ef9bfca5b07dff75bc8aece8fc1901130e2cd8c9678a9fe1b13c142ce30bf83b03f6696f3c023cd103c862d6f30268ea92f6912282e5c9260561b039",
+            "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/dropdown-panel/dropdown-panel.component.ts",
+            "changeDetection": "ChangeDetectionStrategy.OnPush",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "ag-dropdown-panel",
+            "styleUrls": [],
+            "styles": [
+                "\n      :host {\n        height: inherit;\n        width: inherit;\n      }\n      ag-grid-angular {\n        height: 100%;\n        width: 100%;\n      }\n      :host ::ng-deep .ag-row-focus {\n        background-color: var(--ag-row-hover-color);\n      }\n    "
+            ],
+            "template": "<ag-grid-angular\n  [gridOptions]=\"gridOptions()\"\n  [theme]=\"theme()\"\n  (cellKeyDown)=\"cellKeyDown.emit($any($event))\"\n  (firstDataRendered)=\"firstDataRendered.emit($event)\"\n  (gridReady)=\"gridReady.emit($event)\"\n  (selectionChanged)=\"selectionChanged.emit($event)\"\n></ag-grid-angular>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "hostDirectives": [],
+            "inputsClass": [
+                {
+                    "name": "columnHeaderVisible",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 52,
+                    "required": false
+                },
+                {
+                    "name": "gridOptions",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 53,
+                    "required": false
+                },
+                {
+                    "name": "theme",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 54,
+                    "required": false
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "cellKeyDown",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 56,
+                    "required": false
+                }
+            ],
+            "propertiesClass": [
+                {
+                    "name": "agGrid",
+                    "defaultValue": "contentChild(AgGridAngular)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 61
+                },
+                {
+                    "name": "cellKeyDown",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 56,
+                    "required": false
+                },
+                {
+                    "name": "columnHeaderVisible",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 52,
+                    "required": false
+                },
+                {
+                    "name": "elRef",
+                    "defaultValue": "inject(ElementRef<HTMLElement>)",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 62,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "firstDataRendered",
+                    "defaultValue": "output<FirstDataRenderedEvent<TData, TContext>>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 57
+                },
+                {
+                    "name": "gridOptions",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 53,
+                    "required": false
+                },
+                {
+                    "name": "gridReady",
+                    "defaultValue": "output<GridReadyEvent<TData, TContext>>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 58
+                },
+                {
+                    "name": "selectionChanged",
+                    "defaultValue": "output<SelectionChangedEvent<TData, TContext>>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 59
+                },
+                {
+                    "name": "theme",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 54,
+                    "required": false
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "initAgHeader",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 75,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "ngAfterViewInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 71,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "standalone": false,
+            "imports": [
+                {
+                    "name": "AgGridAngular"
+                }
+            ],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import {\n  AfterViewInit,\n  ChangeDetectionStrategy,\n  Component,\n  contentChild,\n  ElementRef,\n  inject,\n  input,\n  output,\n} from '@angular/core';\nimport { AgGridAngular } from 'ag-grid-angular';\nimport {\n  CellKeyDownEvent,\n  FirstDataRenderedEvent,\n  GridOptions,\n  GridReadyEvent,\n  SelectionChangedEvent,\n  Theme,\n} from 'ag-grid-community';\n\n@Component({\n  selector: 'ag-dropdown-panel',\n  imports: [AgGridAngular],\n  template: `\n    <ag-grid-angular\n      [gridOptions]=\"gridOptions()\"\n      [theme]=\"theme()\"\n      (cellKeyDown)=\"cellKeyDown.emit($any($event))\"\n      (firstDataRendered)=\"firstDataRendered.emit($event)\"\n      (gridReady)=\"gridReady.emit($event)\"\n      (selectionChanged)=\"selectionChanged.emit($event)\"\n    ></ag-grid-angular>\n  `,\n  styles: [\n    `\n      :host {\n        height: inherit;\n        width: inherit;\n      }\n      ag-grid-angular {\n        height: 100%;\n        width: 100%;\n      }\n      :host ::ng-deep .ag-row-focus {\n        background-color: var(--ag-row-hover-color);\n      }\n    `,\n  ],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class DropdownPanelComponent<TData = any, TContext = any> implements AfterViewInit {\n  columnHeaderVisible = input(false);\n  gridOptions = input<GridOptions>();\n  theme = input<Theme>();\n\n  cellKeyDown = output<CellKeyDownEvent>();\n  firstDataRendered = output<FirstDataRenderedEvent<TData, TContext>>();\n  gridReady = output<GridReadyEvent<TData, TContext>>();\n  selectionChanged = output<SelectionChangedEvent<TData, TContext>>();\n\n  agGrid = contentChild(AgGridAngular);\n  private elRef = inject(ElementRef<HTMLElement>);\n\n  get context() {\n    return this.agGrid()?.context || this.agGrid()?.gridOptions?.context;\n  }\n  get gridApi() {\n    return this.agGrid()?.api;\n  }\n\n  ngAfterViewInit(): void {\n    this.initAgHeader();\n  }\n\n  private initAgHeader() {\n    const element = this.elRef.nativeElement as HTMLElement;\n    const agHeaderEl = element.querySelector('.ag-header') as HTMLElement;\n    agHeaderEl.style.display = this.columnHeaderVisible() ? 'block' : 'none';\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "\n      :host {\n        height: inherit;\n        width: inherit;\n      }\n      ag-grid-angular {\n        height: 100%;\n        width: 100%;\n      }\n      :host ::ng-deep .ag-row-focus {\n        background-color: var(--ag-row-hover-color);\n      }\n    \n",
+            "extends": [],
+            "implements": [
+                "AfterViewInit"
+            ],
+            "accessors": {
+                "context": {
+                    "name": "context",
+                    "getSignature": {
+                        "name": "context",
+                        "type": "",
+                        "returnType": "",
+                        "line": 64
+                    }
+                },
+                "gridApi": {
+                    "name": "gridApi",
+                    "getSignature": {
+                        "name": "gridApi",
+                        "type": "",
+                        "returnType": "",
+                        "line": 67
+                    }
+                }
+            }
         }
     ],
     "modules": [],
@@ -1133,7 +2812,27 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "",
-                "defaultValue": "{\n  copySelectedRows: {\n    icon: 'content_copy',\n    tooltip: 'Copy selected rows',\n    clickFn: async (params) => {\n      const { api } = params.event;\n      const rows = api.getSelectedRows();\n      const jsonString = JSON.stringify(rows, null, 2);\n      try {\n        await navigator.clipboard.writeText(jsonString);\n      } catch (err) {\n        throw err; // Let the caller handle the error\n      }\n    },\n  } as AgGridToolbarAction,\n  csv: {\n    icon: 'file_download',\n    tooltip: 'Export as csv',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.exportDataAsCsv();\n    },\n  } as AgGridToolbarAction,\n  fit: {\n    icon: 'view_column',\n    tooltip: 'Fit columns',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.sizeColumnsToFit();\n    },\n  } as AgGridToolbarAction,\n  reset: {\n    icon: 'history',\n    tooltip: 'Reset columns',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.resetColumnState();\n    },\n  } as AgGridToolbarAction,\n} as const"
+                "defaultValue": "{\n  copySelectedRows: {\n    icon: 'content_copy',\n    tooltip: 'Copy selected rows',\n    clickFn: async (params) => {\n      const { api } = params.event;\n      const rows = api.getSelectedRows();\n      const jsonString = JSON.stringify(rows, null, 2);\n      try {\n        await navigator.clipboard.writeText(jsonString);\n      } catch (err) {\n        throw err;\n      }\n    },\n  } as AgGridToolbarAction,\n  csv: {\n    icon: 'file_download',\n    tooltip: 'Export as csv',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.exportDataAsCsv();\n    },\n  } as AgGridToolbarAction,\n  fit: {\n    icon: 'view_column',\n    tooltip: 'Fit columns',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.sizeColumnsToFit();\n    },\n  } as AgGridToolbarAction,\n  reset: {\n    icon: 'history',\n    tooltip: 'Reset columns',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.resetColumnState();\n    },\n  } as AgGridToolbarAction,\n} as const"
+            },
+            {
+                "name": "columnDefs",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "ColDef[]",
+                "defaultValue": "[\n  { field: 'id', hide: true, width: 55 },\n  { field: 'brand' },\n  { field: 'model' },\n]"
+            },
+            {
+                "name": "columnDefs",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "ColDef[]",
+                "defaultValue": "[\n  { field: 'id', hide: true, width: 55 },\n  { field: 'brand' },\n  { field: 'model' },\n]"
             },
             {
                 "name": "ContentProjections",
@@ -1163,7 +2862,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "object",
-                "defaultValue": "{\n  actions: [\n    agGridToolbarAction.fit,\n    agGridToolbarAction.reset,\n    agGridToolbarAction.csv,\n  ],\n  debounceSearch: 500,\n  disableSearch: false,\n  enableSearch: true,\n  placeholderSearch: 'Search..',\n}"
+                "defaultValue": "{\n  actions: [agGridToolbarAction.fit, agGridToolbarAction.reset, agGridToolbarAction.csv],\n  debounceSearch: 500,\n  disableSearch: false,\n  enableSearch: true,\n  placeholderSearch: 'Search..',\n}"
             },
             {
                 "name": "gridOptions",
@@ -1203,7 +2902,47 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "Meta<AgGridToolbarComponent>",
-                "defaultValue": "{\n  title: 'Ag Grid Extension',\n  component: AgGridToolbarComponent,\n  decorators: [\n    componentWrapperDecorator(\n      (story) => `<div style=\"height: 500px;\">${story}</div>`,\n    ),\n    moduleMetadata({\n      imports: [AgGridModule],\n    }),\n  ],\n  render: (args) => {\n    return {\n      props: {\n        ...args,\n        themeMap,\n        gridOptions: {\n          ...gridOptions,\n          ...(args as any).extraGridOptions,\n        },\n      },\n      template: `\n    <ag-grid-toolbar\n      [actions]=\"actions\"\n      [disableSearch]=\"disableSearch\"\n      [debounceSearch]=\"debounceSearch\"\n      [enableSearch]=\"enableSearch\"\n      [placeholderSearch]=\"placeholderSearch\">\n      \n      <ag-grid-angular [gridOptions]=\"gridOptions\" [theme]=\"themeMap[agTheme]\"></ag-grid-angular>\n    </ag-grid-toolbar>\n    `,\n    };\n  },\n  tags: ['autodocs'],\n}"
+                "defaultValue": "{\n  title: 'Ag Grid Extension',\n  component: AgGridToolbarComponent,\n  decorators: [\n    componentWrapperDecorator((story) => `<div style=\"height: 500px;\">${story}</div>`),\n    moduleMetadata({\n      imports: [AgGridModule],\n    }),\n  ],\n  render: (args) => {\n    return {\n      props: {\n        ...args,\n        themeMap,\n        gridOptions: {\n          ...gridOptions,\n          ...(args as any).extraGridOptions,\n        },\n      },\n      template: `\n    <ag-grid-toolbar\n      [actions]=\"actions\"\n      [disableSearch]=\"disableSearch\"\n      [debounceSearch]=\"debounceSearch\"\n      [enableSearch]=\"enableSearch\"\n      [placeholderSearch]=\"placeholderSearch\">\n      \n      <ag-grid-angular [gridOptions]=\"gridOptions\" [theme]=\"themeMap[agTheme]\"></ag-grid-angular>\n    </ag-grid-toolbar>\n    `,\n    };\n  },\n  tags: ['autodocs'],\n}"
+            },
+            {
+                "name": "meta",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Meta<DropdownComponent>",
+                "defaultValue": "{\n  title: 'Dropdown',\n  component: DropdownComponent,\n  decorators: [\n    componentWrapperDecorator((story) => `<div style=\"height: 500px;\">${story}</div>`),\n    moduleMetadata({\n      imports: [AgGridModule],\n    }),\n  ],\n  render: (args) => {\n    return {\n      props: {\n        ...args,\n        themeMap,\n        selectionChange: (event: any) => {\n          console.log('selectionChange', event);\n        },\n      },\n      template: `\n      <ag-dropdown\n        [columnHeaderVisible]=\"columnHeaderVisible\"\n        [displayFields]=\"displayFields\"\n        [gridOptions]=\"gridOptions\"\n        [listSize]=\"listSize\" \n        [selected]=\"selected\"\n        [theme]=\"themeMap[agTheme]\"\n        [valueField]=\"valueField\" \n        (selectionChange)=\"selectionChange = $event\">\n      </ag-dropdown>\n      <code>\n        <pre>{{ selectionChange | json }}</pre>\n      </code>\n      `,\n    };\n  },\n  tags: ['autodocs'],\n}"
+            },
+            {
+                "name": "meta",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Meta<DropdownFormControlComponent>",
+                "defaultValue": "{\n  title: 'FormDropdown',\n  component: DropdownFormControlComponent,\n  decorators: [\n    componentWrapperDecorator((story) => `<div style=\"height: 500px;\">${story}</div>`),\n    moduleMetadata({\n      imports: [AgGridModule, ReactiveFormsModule],\n    }),\n  ],\n  render: (args) => {\n    let selected = rowData[1];\n    const formGroup = new FormGroup({\n      formControlKey1: new FormControl(),\n    });\n    return {\n      props: {\n        ...args,\n        formGroup,\n        selected,\n        themeMap,\n        selectionChange: (event: any) => {\n          selected = event.selected;\n        },\n      },\n      template: `\n        <form [formGroup]=\"formGroup\">\n          <ag-dropdown-form-control\n            [columnHeaderVisible]=\"columnHeaderVisible\"\n            [displayFields]=\"displayFields\"\n            [formControl]=\"formGroup.controls.formControlKey1\"\n            [gridOptions]=\"gridOptions\"\n            [listSize]=\"listSize\" \n            [selected]=\"selected\"\n            [theme]=\"themeMap[agTheme]\"\n            [valueField]=\"valueField\" \n            (selectionChange)=\"selectionChange = $event\">\n          </ag-dropdown-form-control>\n        </form>\n        <code>\n          <pre>{{ formGroup.value | json }}</pre>\n        </code>\n      `,\n    };\n  },\n  tags: ['autodocs'],\n}"
+            },
+            {
+                "name": "MultiSelect",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\n  args: {\n    displayFields: ['brand', 'model'],\n    gridOptions: {\n      columnDefs,\n      rowSelection: {\n        mode: 'multiRow',\n        enableClickSelection: true,\n        checkboxes: false,\n        headerCheckbox: false,\n      },\n      rowData,\n    },\n    listSize: 7,\n    selected: [rowData[5], rowData[6]],\n    valueField: 'id',\n  },\n}"
+            },
+            {
+                "name": "MultiSelect",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\n  args: {\n    displayFields: ['brand', 'model'],\n    gridOptions: {\n      columnDefs,\n      rowSelection: {\n        mode: 'multiRow',\n        enableClickSelection: true,\n        checkboxes: false,\n        headerCheckbox: false,\n      },\n      rowData,\n    },\n    listSize: 7,\n    selected: [rowData[5], rowData[6]],\n    valueField: 'id',\n  },\n}"
             },
             {
                 "name": "preview",
@@ -1216,6 +2955,26 @@
                 "defaultValue": "{\n  args: { agTheme: 'ag-theme-alpine' },\n  argTypes: {\n    agTheme: {\n      control: { type: 'radio' },\n      options: ['alpine', 'balham', 'material', 'quartz'],\n    },\n  },\n  parameters: {\n    controls: {\n      matchers: {\n        color: /(background|color)$/i,\n        date: /Date$/i,\n      },\n    },\n  },\n  tags: ['autodocs'],\n}"
             },
             {
+                "name": "rowData",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "[]",
+                "defaultValue": "[\n  { id: 1, brand: 'Toyota', model: 'Camry' },\n  { id: 2, brand: 'Honda', model: 'Civic' },\n  { id: 3, brand: 'Ford', model: 'Mustang' },\n  { id: 4, brand: 'Chevrolet', model: 'Corvette' },\n  { id: 5, brand: 'Volkswagen', model: 'Golf' },\n  { id: 6, brand: 'Nissan', model: 'Altima' },\n  { id: 7, brand: 'Kia', model: 'Sorento' },\n  { id: 8, brand: 'Hyundai', model: 'Elantra' },\n  { id: 9, brand: 'Subaru', model: 'Outback' },\n  { id: 10, brand: 'Audi', model: 'A4' },\n  { id: 11, brand: 'BMW', model: 'X5' },\n  { id: 12, brand: 'Mercedes', model: 'C-Class' },\n  { id: 13, brand: 'Lexus', model: 'LX' },\n  { id: 14, brand: 'Tesla', model: 'Model S' },\n  { id: 15, brand: 'Tesla', model: 'Model 3' },\n  { id: 16, brand: 'Tesla', model: 'Model X' },\n  { id: 17, brand: 'Tesla', model: 'Model Y' },\n  { id: 18, brand: 'Tesla', model: 'Cybertruck' },\n]"
+            },
+            {
+                "name": "rowData",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "[]",
+                "defaultValue": "[\n  { id: 1, brand: 'Toyota', model: 'Camry' },\n  { id: 2, brand: 'Honda', model: 'Civic' },\n  { id: 3, brand: 'Ford', model: 'Mustang' },\n  { id: 4, brand: 'Chevrolet', model: 'Corvette' },\n  { id: 5, brand: 'Volkswagen', model: 'Golf' },\n  { id: 6, brand: 'Nissan', model: 'Altima' },\n  { id: 7, brand: 'Kia', model: 'Sorento' },\n  { id: 8, brand: 'Hyundai', model: 'Elantra' },\n  { id: 9, brand: 'Subaru', model: 'Outback' },\n  { id: 10, brand: 'Audi', model: 'A4' },\n  { id: 11, brand: 'BMW', model: 'X5' },\n  { id: 12, brand: 'Mercedes', model: 'C-Class' },\n  { id: 13, brand: 'Lexus', model: 'LX' },\n  { id: 14, brand: 'Tesla', model: 'Model S' },\n  { id: 15, brand: 'Tesla', model: 'Model 3' },\n  { id: 16, brand: 'Tesla', model: 'Model X' },\n  { id: 17, brand: 'Tesla', model: 'Model Y' },\n  { id: 18, brand: 'Tesla', model: 'Cybertruck' },\n]"
+            },
+            {
                 "name": "SearchAndActions",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
@@ -1226,10 +2985,50 @@
                 "defaultValue": "{\n  args: {\n    ...defaults,\n    actions: actions,\n  },\n}"
             },
             {
+                "name": "SingleSelect",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\n  args: {\n    displayFields: ['brand', 'model'],\n    valueField: 'id',\n    listSize: 7,\n    gridOptions: {\n      columnDefs,\n      rowSelection: { mode: 'singleRow', enableClickSelection: true, checkboxes: false },\n      rowData,\n    },\n    selected: rowData[5],\n  },\n}"
+            },
+            {
+                "name": "SingleSelect",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\n  args: {\n    displayFields: ['brand', 'model'],\n    valueField: 'id',\n    listSize: 7,\n    gridOptions: {\n      columnDefs,\n      rowSelection: { mode: 'singleRow', enableClickSelection: true, checkboxes: false },\n      rowData,\n    },\n    // selected: rowData[5],\n  },\n}"
+            },
+            {
                 "name": "themeMap",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-toolbar/ag-grid-toolbar.stories.ts",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "object",
+                "defaultValue": "{\n  alpine: themeAlpine,\n  balham: themeBalham,\n  material: themeMaterial,\n  quartz: themeQuartz,\n}"
+            },
+            {
+                "name": "themeMap",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/stories/story-helpers/theme-map.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "object",
+                "defaultValue": "{\n  alpine: themeAlpine,\n  balham: themeBalham,\n  material: themeMaterial,\n  quartz: themeQuartz,\n}"
+            },
+            {
+                "name": "themeMap",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "object",
@@ -1306,6 +3105,28 @@
                 "deprecationMessage": "",
                 "description": "",
                 "kind": 183
+            },
+            {
+                "name": "Story",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "StoryObj<DropdownComponent>",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 183
+            },
+            {
+                "name": "Story",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "StoryObj<DropdownFormControlComponent>",
+                "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 183
             }
         ],
         "enumerations": [],
@@ -1339,7 +3160,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "object",
-                    "defaultValue": "{\n  actions: [\n    agGridToolbarAction.fit,\n    agGridToolbarAction.reset,\n    agGridToolbarAction.csv,\n  ],\n  debounceSearch: 500,\n  disableSearch: false,\n  enableSearch: true,\n  placeholderSearch: 'Search..',\n}"
+                    "defaultValue": "{\n  actions: [agGridToolbarAction.fit, agGridToolbarAction.reset, agGridToolbarAction.csv],\n  debounceSearch: 500,\n  disableSearch: false,\n  enableSearch: true,\n  placeholderSearch: 'Search..',\n}"
                 },
                 {
                     "name": "meta",
@@ -1349,7 +3170,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "Meta<AgGridToolbarComponent>",
-                    "defaultValue": "{\n  title: 'Ag Grid Extension',\n  component: AgGridToolbarComponent,\n  decorators: [\n    componentWrapperDecorator(\n      (story) => `<div style=\"height: 500px;\">${story}</div>`,\n    ),\n    moduleMetadata({\n      imports: [AgGridModule],\n    }),\n  ],\n  render: (args) => {\n    return {\n      props: {\n        ...args,\n        themeMap,\n        gridOptions: {\n          ...gridOptions,\n          ...(args as any).extraGridOptions,\n        },\n      },\n      template: `\n    <ag-grid-toolbar\n      [actions]=\"actions\"\n      [disableSearch]=\"disableSearch\"\n      [debounceSearch]=\"debounceSearch\"\n      [enableSearch]=\"enableSearch\"\n      [placeholderSearch]=\"placeholderSearch\">\n      \n      <ag-grid-angular [gridOptions]=\"gridOptions\" [theme]=\"themeMap[agTheme]\"></ag-grid-angular>\n    </ag-grid-toolbar>\n    `,\n    };\n  },\n  tags: ['autodocs'],\n}"
+                    "defaultValue": "{\n  title: 'Ag Grid Extension',\n  component: AgGridToolbarComponent,\n  decorators: [\n    componentWrapperDecorator((story) => `<div style=\"height: 500px;\">${story}</div>`),\n    moduleMetadata({\n      imports: [AgGridModule],\n    }),\n  ],\n  render: (args) => {\n    return {\n      props: {\n        ...args,\n        themeMap,\n        gridOptions: {\n          ...gridOptions,\n          ...(args as any).extraGridOptions,\n        },\n      },\n      template: `\n    <ag-grid-toolbar\n      [actions]=\"actions\"\n      [disableSearch]=\"disableSearch\"\n      [debounceSearch]=\"debounceSearch\"\n      [enableSearch]=\"enableSearch\"\n      [placeholderSearch]=\"placeholderSearch\">\n      \n      <ag-grid-angular [gridOptions]=\"gridOptions\" [theme]=\"themeMap[agTheme]\"></ag-grid-angular>\n    </ag-grid-toolbar>\n    `,\n    };\n  },\n  tags: ['autodocs'],\n}"
                 },
                 {
                     "name": "SearchAndActions",
@@ -1360,16 +3181,6 @@
                     "deprecationMessage": "",
                     "type": "Story",
                     "defaultValue": "{\n  args: {\n    ...defaults,\n    actions: actions,\n  },\n}"
-                },
-                {
-                    "name": "themeMap",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-toolbar/ag-grid-toolbar.stories.ts",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "object",
-                    "defaultValue": "{\n  alpine: themeAlpine,\n  balham: themeBalham,\n  material: themeMaterial,\n  quartz: themeQuartz,\n}"
                 }
             ],
             "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-toolbar/constants/ag-grid-toolbar-actions.ts": [
@@ -1381,7 +3192,131 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "",
-                    "defaultValue": "{\n  copySelectedRows: {\n    icon: 'content_copy',\n    tooltip: 'Copy selected rows',\n    clickFn: async (params) => {\n      const { api } = params.event;\n      const rows = api.getSelectedRows();\n      const jsonString = JSON.stringify(rows, null, 2);\n      try {\n        await navigator.clipboard.writeText(jsonString);\n      } catch (err) {\n        throw err; // Let the caller handle the error\n      }\n    },\n  } as AgGridToolbarAction,\n  csv: {\n    icon: 'file_download',\n    tooltip: 'Export as csv',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.exportDataAsCsv();\n    },\n  } as AgGridToolbarAction,\n  fit: {\n    icon: 'view_column',\n    tooltip: 'Fit columns',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.sizeColumnsToFit();\n    },\n  } as AgGridToolbarAction,\n  reset: {\n    icon: 'history',\n    tooltip: 'Reset columns',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.resetColumnState();\n    },\n  } as AgGridToolbarAction,\n} as const"
+                    "defaultValue": "{\n  copySelectedRows: {\n    icon: 'content_copy',\n    tooltip: 'Copy selected rows',\n    clickFn: async (params) => {\n      const { api } = params.event;\n      const rows = api.getSelectedRows();\n      const jsonString = JSON.stringify(rows, null, 2);\n      try {\n        await navigator.clipboard.writeText(jsonString);\n      } catch (err) {\n        throw err;\n      }\n    },\n  } as AgGridToolbarAction,\n  csv: {\n    icon: 'file_download',\n    tooltip: 'Export as csv',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.exportDataAsCsv();\n    },\n  } as AgGridToolbarAction,\n  fit: {\n    icon: 'view_column',\n    tooltip: 'Fit columns',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.sizeColumnsToFit();\n    },\n  } as AgGridToolbarAction,\n  reset: {\n    icon: 'history',\n    tooltip: 'Reset columns',\n    clickFn: (params) => {\n      const { api } = params.event;\n      api.resetColumnState();\n    },\n  } as AgGridToolbarAction,\n} as const"
+                }
+            ],
+            "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts": [
+                {
+                    "name": "columnDefs",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ColDef[]",
+                    "defaultValue": "[\n  { field: 'id', hide: true, width: 55 },\n  { field: 'brand' },\n  { field: 'model' },\n]"
+                },
+                {
+                    "name": "meta",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Meta<DropdownComponent>",
+                    "defaultValue": "{\n  title: 'Dropdown',\n  component: DropdownComponent,\n  decorators: [\n    componentWrapperDecorator((story) => `<div style=\"height: 500px;\">${story}</div>`),\n    moduleMetadata({\n      imports: [AgGridModule],\n    }),\n  ],\n  render: (args) => {\n    return {\n      props: {\n        ...args,\n        themeMap,\n        selectionChange: (event: any) => {\n          console.log('selectionChange', event);\n        },\n      },\n      template: `\n      <ag-dropdown\n        [columnHeaderVisible]=\"columnHeaderVisible\"\n        [displayFields]=\"displayFields\"\n        [gridOptions]=\"gridOptions\"\n        [listSize]=\"listSize\" \n        [selected]=\"selected\"\n        [theme]=\"themeMap[agTheme]\"\n        [valueField]=\"valueField\" \n        (selectionChange)=\"selectionChange = $event\">\n      </ag-dropdown>\n      <code>\n        <pre>{{ selectionChange | json }}</pre>\n      </code>\n      `,\n    };\n  },\n  tags: ['autodocs'],\n}"
+                },
+                {
+                    "name": "MultiSelect",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\n  args: {\n    displayFields: ['brand', 'model'],\n    gridOptions: {\n      columnDefs,\n      rowSelection: {\n        mode: 'multiRow',\n        enableClickSelection: true,\n        checkboxes: false,\n        headerCheckbox: false,\n      },\n      rowData,\n    },\n    listSize: 7,\n    selected: [rowData[5], rowData[6]],\n    valueField: 'id',\n  },\n}"
+                },
+                {
+                    "name": "rowData",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "[]",
+                    "defaultValue": "[\n  { id: 1, brand: 'Toyota', model: 'Camry' },\n  { id: 2, brand: 'Honda', model: 'Civic' },\n  { id: 3, brand: 'Ford', model: 'Mustang' },\n  { id: 4, brand: 'Chevrolet', model: 'Corvette' },\n  { id: 5, brand: 'Volkswagen', model: 'Golf' },\n  { id: 6, brand: 'Nissan', model: 'Altima' },\n  { id: 7, brand: 'Kia', model: 'Sorento' },\n  { id: 8, brand: 'Hyundai', model: 'Elantra' },\n  { id: 9, brand: 'Subaru', model: 'Outback' },\n  { id: 10, brand: 'Audi', model: 'A4' },\n  { id: 11, brand: 'BMW', model: 'X5' },\n  { id: 12, brand: 'Mercedes', model: 'C-Class' },\n  { id: 13, brand: 'Lexus', model: 'LX' },\n  { id: 14, brand: 'Tesla', model: 'Model S' },\n  { id: 15, brand: 'Tesla', model: 'Model 3' },\n  { id: 16, brand: 'Tesla', model: 'Model X' },\n  { id: 17, brand: 'Tesla', model: 'Model Y' },\n  { id: 18, brand: 'Tesla', model: 'Cybertruck' },\n]"
+                },
+                {
+                    "name": "SingleSelect",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\n  args: {\n    displayFields: ['brand', 'model'],\n    valueField: 'id',\n    listSize: 7,\n    gridOptions: {\n      columnDefs,\n      rowSelection: { mode: 'singleRow', enableClickSelection: true, checkboxes: false },\n      rowData,\n    },\n    selected: rowData[5],\n  },\n}"
+                },
+                {
+                    "name": "themeMap",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\n  alpine: themeAlpine,\n  balham: themeBalham,\n  material: themeMaterial,\n  quartz: themeQuartz,\n}"
+                }
+            ],
+            "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts": [
+                {
+                    "name": "columnDefs",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ColDef[]",
+                    "defaultValue": "[\n  { field: 'id', hide: true, width: 55 },\n  { field: 'brand' },\n  { field: 'model' },\n]"
+                },
+                {
+                    "name": "meta",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Meta<DropdownFormControlComponent>",
+                    "defaultValue": "{\n  title: 'FormDropdown',\n  component: DropdownFormControlComponent,\n  decorators: [\n    componentWrapperDecorator((story) => `<div style=\"height: 500px;\">${story}</div>`),\n    moduleMetadata({\n      imports: [AgGridModule, ReactiveFormsModule],\n    }),\n  ],\n  render: (args) => {\n    let selected = rowData[1];\n    const formGroup = new FormGroup({\n      formControlKey1: new FormControl(),\n    });\n    return {\n      props: {\n        ...args,\n        formGroup,\n        selected,\n        themeMap,\n        selectionChange: (event: any) => {\n          selected = event.selected;\n        },\n      },\n      template: `\n        <form [formGroup]=\"formGroup\">\n          <ag-dropdown-form-control\n            [columnHeaderVisible]=\"columnHeaderVisible\"\n            [displayFields]=\"displayFields\"\n            [formControl]=\"formGroup.controls.formControlKey1\"\n            [gridOptions]=\"gridOptions\"\n            [listSize]=\"listSize\" \n            [selected]=\"selected\"\n            [theme]=\"themeMap[agTheme]\"\n            [valueField]=\"valueField\" \n            (selectionChange)=\"selectionChange = $event\">\n          </ag-dropdown-form-control>\n        </form>\n        <code>\n          <pre>{{ formGroup.value | json }}</pre>\n        </code>\n      `,\n    };\n  },\n  tags: ['autodocs'],\n}"
+                },
+                {
+                    "name": "MultiSelect",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\n  args: {\n    displayFields: ['brand', 'model'],\n    gridOptions: {\n      columnDefs,\n      rowSelection: {\n        mode: 'multiRow',\n        enableClickSelection: true,\n        checkboxes: false,\n        headerCheckbox: false,\n      },\n      rowData,\n    },\n    listSize: 7,\n    selected: [rowData[5], rowData[6]],\n    valueField: 'id',\n  },\n}"
+                },
+                {
+                    "name": "rowData",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "[]",
+                    "defaultValue": "[\n  { id: 1, brand: 'Toyota', model: 'Camry' },\n  { id: 2, brand: 'Honda', model: 'Civic' },\n  { id: 3, brand: 'Ford', model: 'Mustang' },\n  { id: 4, brand: 'Chevrolet', model: 'Corvette' },\n  { id: 5, brand: 'Volkswagen', model: 'Golf' },\n  { id: 6, brand: 'Nissan', model: 'Altima' },\n  { id: 7, brand: 'Kia', model: 'Sorento' },\n  { id: 8, brand: 'Hyundai', model: 'Elantra' },\n  { id: 9, brand: 'Subaru', model: 'Outback' },\n  { id: 10, brand: 'Audi', model: 'A4' },\n  { id: 11, brand: 'BMW', model: 'X5' },\n  { id: 12, brand: 'Mercedes', model: 'C-Class' },\n  { id: 13, brand: 'Lexus', model: 'LX' },\n  { id: 14, brand: 'Tesla', model: 'Model S' },\n  { id: 15, brand: 'Tesla', model: 'Model 3' },\n  { id: 16, brand: 'Tesla', model: 'Model X' },\n  { id: 17, brand: 'Tesla', model: 'Model Y' },\n  { id: 18, brand: 'Tesla', model: 'Cybertruck' },\n]"
+                },
+                {
+                    "name": "SingleSelect",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\n  args: {\n    displayFields: ['brand', 'model'],\n    valueField: 'id',\n    listSize: 7,\n    gridOptions: {\n      columnDefs,\n      rowSelection: { mode: 'singleRow', enableClickSelection: true, checkboxes: false },\n      rowData,\n    },\n    // selected: rowData[5],\n  },\n}"
+                },
+                {
+                    "name": "themeMap",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\n  alpine: themeAlpine,\n  balham: themeBalham,\n  material: themeMaterial,\n  quartz: themeQuartz,\n}"
                 }
             ],
             "projects/extension-packages/ag-grid-angular/src/stories/story-helpers/grid-options.ts": [
@@ -1438,6 +3373,18 @@
                     "deprecationMessage": "",
                     "type": "Preview",
                     "defaultValue": "{\n  args: { agTheme: 'ag-theme-alpine' },\n  argTypes: {\n    agTheme: {\n      control: { type: 'radio' },\n      options: ['alpine', 'balham', 'material', 'quartz'],\n    },\n  },\n  parameters: {\n    controls: {\n      matchers: {\n        color: /(background|color)$/i,\n        date: /Date$/i,\n      },\n    },\n  },\n  tags: ['autodocs'],\n}"
+                }
+            ],
+            "projects/extension-packages/ag-grid-angular/src/stories/story-helpers/theme-map.ts": [
+                {
+                    "name": "themeMap",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/extension-packages/ag-grid-angular/src/stories/story-helpers/theme-map.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\n  alpine: themeAlpine,\n  balham: themeBalham,\n  material: themeMaterial,\n  quartz: themeQuartz,\n}"
                 }
             ],
             "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-toolbar/components/ag-grid-toolbar-search/ag-grid-toolbar-search.component.ts": [
@@ -1518,12 +3465,38 @@
                     "description": "",
                     "kind": 183
                 }
+            ],
+            "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts": [
+                {
+                    "name": "Story",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "StoryObj<DropdownComponent>",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 183
+                }
+            ],
+            "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts": [
+                {
+                    "name": "Story",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "StoryObj<DropdownFormControlComponent>",
+                    "file": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 183
+                }
             ]
         }
     },
     "routes": [],
     "coverage": {
-        "count": 10,
+        "count": 8,
         "status": "low",
         "files": [
             {
@@ -1582,16 +3555,6 @@
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
                 "name": "SearchAndActions",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/ag-grid-toolbar/ag-grid-toolbar.stories.ts",
-                "type": "variable",
-                "linktype": "miscellaneous",
-                "linksubtype": "variable",
-                "name": "themeMap",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
@@ -1680,6 +3643,180 @@
                 "status": "low"
             },
             {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/dropdown-panel/dropdown-panel.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DropdownPanelComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/16",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/dropdown/dropdown.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DropdownComponent",
+                "coveragePercent": 2,
+                "coverageCount": "1/34",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "DropdownFormControlComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/23",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "columnDefs",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "meta",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "MultiSelect",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "rowData",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "SingleSelect",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/components/form-dropdown/form-dropdown.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "themeMap",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "columnDefs",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "meta",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "MultiSelect",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "rowData",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "SingleSelect",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/dropdown.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "themeMap",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/interfaces/dropdown-selection-change-event.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "DropdownPanelSelectionChangeEvent",
+                "coveragePercent": 50,
+                "coverageCount": "1/2",
+                "status": "medium"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/interfaces/dropdown-selection-change-event.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "DropdownSelectionChangeEvent",
+                "coveragePercent": 50,
+                "coverageCount": "1/2",
+                "status": "medium"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/lib/dropdown-ag-grid/utils.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "DropdownUtils",
+                "coveragePercent": 0,
+                "coverageCount": "0/11",
+                "status": "low"
+            },
+            {
                 "filePath": "projects/extension-packages/ag-grid-angular/src/stories/story-helpers/datasource.service.ts",
                 "type": "injectable",
                 "linktype": "injectable",
@@ -1763,6 +3900,16 @@
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
                 "name": "gridOptionsService",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/extension-packages/ag-grid-angular/src/stories/story-helpers/theme-map.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "themeMap",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
