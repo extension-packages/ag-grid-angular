@@ -5,26 +5,12 @@ import {
   type StoryObj,
 } from '@storybook/angular';
 import { AgGridModule } from 'ag-grid-angular';
-import {
-  AllCommunityModule,
-  GridOptions,
-  ModuleRegistry,
-  themeAlpine,
-  themeBalham,
-  themeMaterial,
-  themeQuartz,
-} from 'ag-grid-community';
+import { AllCommunityModule, GridOptions, ModuleRegistry } from 'ag-grid-community';
 import { agGridToolbarAction, AgGridToolbarAction } from '../../public-api';
 import { gridOptions } from '../../stories/story-helpers/grid-options';
 import { AgGridToolbarComponent } from './components/ag-grid-toolbar/ag-grid-toolbar.component';
+import { themeMap } from '../../stories/story-helpers/theme-map';
 ModuleRegistry.registerModules([AllCommunityModule]);
-
-const themeMap = {
-  alpine: themeAlpine,
-  balham: themeBalham,
-  material: themeMaterial,
-  quartz: themeQuartz,
-};
 
 const actions: AgGridToolbarAction[] = [
   {
@@ -68,11 +54,7 @@ const actions: AgGridToolbarAction[] = [
 ];
 
 const defaults = {
-  actions: [
-    agGridToolbarAction.fit,
-    agGridToolbarAction.reset,
-    agGridToolbarAction.csv,
-  ],
+  actions: [agGridToolbarAction.fit, agGridToolbarAction.reset, agGridToolbarAction.csv],
   debounceSearch: 500,
   disableSearch: false,
   enableSearch: true,
@@ -83,9 +65,7 @@ const meta: Meta<AgGridToolbarComponent> = {
   title: 'Ag Grid Extension',
   component: AgGridToolbarComponent,
   decorators: [
-    componentWrapperDecorator(
-      (story) => `<div style="height: 500px;">${story}</div>`,
-    ),
+    componentWrapperDecorator((story) => `<div style="height: 500px;">${story}</div>`),
     moduleMetadata({
       imports: [AgGridModule],
     }),
@@ -117,9 +97,7 @@ const meta: Meta<AgGridToolbarComponent> = {
 };
 
 export default meta;
-type Story = StoryObj<
-  AgGridToolbarComponent & { extraGridOptions?: GridOptions }
->;
+type Story = StoryObj<AgGridToolbarComponent & { extraGridOptions?: GridOptions }>;
 
 export const SearchAndActions: Story = {
   args: {
